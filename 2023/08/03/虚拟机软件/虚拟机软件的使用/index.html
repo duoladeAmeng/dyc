@@ -1,0 +1,305 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>虚拟机软件的使用 | Blog Site Of Dyc</title><meta name="author" content="Dong Yichang"><meta name="copyright" content="Dong Yichang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="虚拟机技术的作用 真实计算机上安装虚拟机软件，通过模拟计算机的硬件来运行多个虚拟计算机。 常见的基于软件的虚拟机软件包括VirtualBox、VMware Workstation等。 现阶段要模拟真实的 代码测试环境、生产环境、开发环境。 服务器是一个大型的主机，也就意味着主机上必然也装了一个操作系统。 主流服务器使用的操作系统 目前以Linux为主 但大众多使用Windows或Mac，使用虚拟机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="虚拟机软件的使用">
+<meta property="og:url" content="https://duoladeameng.github.io/dyc/2023/08/03/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6%E7%9A%84%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Blog Site Of Dyc">
+<meta property="og:description" content="虚拟机技术的作用 真实计算机上安装虚拟机软件，通过模拟计算机的硬件来运行多个虚拟计算机。 常见的基于软件的虚拟机软件包括VirtualBox、VMware Workstation等。 现阶段要模拟真实的 代码测试环境、生产环境、开发环境。 服务器是一个大型的主机，也就意味着主机上必然也装了一个操作系统。 主流服务器使用的操作系统 目前以Linux为主 但大众多使用Windows或Mac，使用虚拟机">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801133213.png">
+<meta property="article:published_time" content="2023-08-03T04:04:14.238Z">
+<meta property="article:modified_time" content="2023-08-03T04:24:43.467Z">
+<meta property="article:author" content="Dong Yichang">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801133213.png"><link rel="shortcut icon" href="/dyc/img/favicon.png"><link rel="canonical" href="https://duoladeameng.github.io/dyc/2023/08/03/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6%E7%9A%84%E4%BD%BF%E7%94%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/dyc/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/dyc/',
+  algolia: undefined,
+  localSearch: {"path":"/dyc/search.xml","top_n_per_article":1,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '虚拟机软件的使用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-08-03 12:24:43'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><script src="https://npm.elemecdn.com/echarts@4.9.0/dist/echarts.min.js"></script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (false) {
+    document.addEventListener('pjax:send', () => { preloader.initLoading() })
+    document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+  }
+})()</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/mmexport1690774702044.gif" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/dyc/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/dyc/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/dyc/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/dyc/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/dyc/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/dyc/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/dyc/charts/"><i class="fa-fw fas fa-area-chart"></i><span> 统计</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801133213.png')"><nav id="nav"><span id="blog-info"><a href="/dyc/" title="Blog Site Of Dyc"></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/dyc/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/dyc/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/dyc/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/dyc/charts/"><i class="fa-fw fas fa-area-chart"></i><span> 统计</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">虚拟机软件的使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-03T04:04:14.238Z" title="发表于 2023-08-03 12:04:14">2023-08-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-03T04:24:43.467Z" title="更新于 2023-08-03 12:24:43">2023-08-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/dyc/categories/%E5%B7%A5%E5%85%B7/">工具</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/dyc/categories/%E5%B7%A5%E5%85%B7/%E8%99%9A%E6%8B%9F%E6%9C%BA/">虚拟机</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="虚拟机软件的使用"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="虚拟机技术的作用"><a href="#虚拟机技术的作用" class="headerlink" title="虚拟机技术的作用"></a>虚拟机技术的作用</h2><hr>
+<p>真实计算机上安装<code>虚拟机软件</code>，通过模拟计算机的硬件来运行多个虚拟计算机。</p>
+<p>常见的基于软件的虚拟机软件包括VirtualBox、VMware Workstation等。</p>
+<p>现阶段要模拟真实的 代码测试环境、生产环境、开发环境。</p>
+<p>服务器是一个大型的主机，也就意味着主机上必然也装了一个操作系统。</p>
+<p>主流服务器使用的操作系统 目前以Linux为主</p>
+<p>但大众多使用Windows或Mac，使用虚拟机帮助学习者模拟出真实的Linux环境 ，便于学习</p>
+<h2 id="案例-VMWARE安装Ubuntu14"><a href="#案例-VMWARE安装Ubuntu14" class="headerlink" title="案例:VMWARE安装Ubuntu14"></a>案例:VMWARE安装Ubuntu14</h2><hr>
+<h3 id="新建虚拟机"><a href="#新建虚拟机" class="headerlink" title="新建虚拟机"></a>新建虚拟机</h3><p>安装VMWARE之后，从网上下载操作系统镜像文件， 如 Ubuntu官网 <a target="_blank" rel="noopener" href="http://www.ubuntu.com/">http://www.ubuntu.com/</a></p>
+<blockquote>
+<p>镜像文件其实和rar、zip压缩包类似，是将特定的一系列文件按照一定的格式制作成单一的文件，以方便用户下载和使用，例如一个操作系统、游戏等。常见的镜像文件格式有.iso、.mds、.gho等。</p>
+</blockquote>
+<p>下载完成后，打开 VMware 主界面，点击划圆圈的部分“创建新的虚拟机”</p>
+<p>选择自定义选项，然后点击下一步</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091620.png" alt="image.png|500"></p>
+<p>进入兼容性界面，继续点击“下一步”按钮</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091645.png" alt="image.png"></p>
+<p>进入操作系统选择界面，点击稍后安装操作系统，并且点击下一步</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091710.png" alt="image.png"></p>
+<p>进入选择相应操作系统和版本，点下一步</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091734.png" alt="image.png"></p>
+<p>设置虚拟机名称（即每次启动VMware左上方显示的名字），之后选择安装路径（默认在C盘，很不方便）。</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091753.png" alt="image.png"></p>
+<p>进入设置处理器个数以及核心数量选择，点击下一步</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091822.png" alt="image.png"></p>
+<p>设置内存，可以根据自己的电脑配置进行调整，然后点击下一步</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091841.png" alt="image.png"></p>
+<p>网络类型选择 “使用网络地址转换NAT”</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091858.png" alt="image.png"></p>
+<p>SCSI 控制器类型选择推荐的 “LSI Logic”</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091922.png" alt="image.png"></p>
+<p>虚拟磁盘类型选择推荐的 “SCSI”</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091937.png" alt="image.png"></p>
+<p>选择 <strong>“创建新虚拟磁盘”</strong> </p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092000.png" alt="image.png"></p>
+<p>设置磁盘容量，并选择 <strong>“将虚拟磁盘拆分成多个文件”</strong> 。（这里的磁盘大小看个人需求，大于等于推荐的大小）</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092029.png" alt="image.png"></p>
+<p>磁盘文件命名。（自行修改，或接受默认命名）</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092044.png" alt="image.png"></p>
+<p>到这里虚拟机已经创建完成！可以直接点击 “完成” 。（也可以点击 <strong>“自定义硬件”</strong> ，修改内存大小、处理器内核等设置）</p>
+<h3 id="安装操作系统"><a href="#安装操作系统" class="headerlink" title="安装操作系统"></a>安装操作系统</h3><p>回到 VMware 界面，可以看到 <strong>“我的计算机”</strong> 下多了一个Ubuntu（就是我们刚才创建的虚拟机），点击 <strong>“编辑虚拟机设置”</strong> </p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092115.png" alt="image.png"></p>
+<p>选择 <strong>“CD&#x2F;DVD”</strong> ，在设备状态中 <strong>勾选 “启动时连接”</strong> ，在连接中选择 <strong>“使用ISO映像文件”</strong> ，点击 “<strong>浏览”</strong> 选择准备好的操作系统的镜像文件，点击 <strong>“确定”</strong> </p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092146.png" alt="image.png"></p>
+<p>选择虚拟机，点击 <strong>“开启此虚拟机”</strong> </p>
+<p>进入Ubuntu的安装界面，选择语言，点击 <strong>“安装Ubuntu”</strong> </p>
+<p>这里的 <strong>“安装Ubuntu时下载更新”</strong> 就<strong>不用勾选</strong>了（系统安装完成后再选择更新也行）</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092220.png" alt="image.png"></p>
+<p>接下来的选项全部按照 <strong>默认</strong> 即可</p>
+<p>选择地区</p>
+<p>选择语言</p>
+<p>设置姓名、计算机名、密码等等</p>
+<p>等待安装完成</p>
+<p>安装完成，选择 <strong>“现在重启”</strong></p>
+<p>可以看到现在虚拟机的窗口比较小。点击左侧的 <strong>“系统设置”</strong> 图标 ，再点击 <strong>“显示” 。</strong></p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092315.png" alt="image.png"></p>
+<p>修改<strong>分辨率</strong>（和主机分辨率差不多就行），再点击右下角的 <strong>“应用”</strong> 。</p>
+<p>选择左上角 <strong>“查看 -&gt; 全屏”</strong> ，就可以进入全屏模式。</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092352.png" alt="image.png"></p>
+<h2 id="虚拟机克隆"><a href="#虚拟机克隆" class="headerlink" title="虚拟机克隆"></a>虚拟机克隆</h2><hr>
+<p>方式1 复制虚拟机文件夹</p>
+<p>1、首先复制已经创建好的虚拟机所在的文件夹<br>2、将文件夹存在在其它文件夹内，并重新命名。<br>3、在虚拟机中打开这个复制的文件夹<br>4、找到复制的文件夹中的后缀为vmx的文件，然后打开。此时虚拟机中已经出现了你复制的虚拟机，并且用户名和密码与你原先的虚拟机是一样的。</p>
+<p>方式2 VM克隆</p>
+<p>我认为方式1更方便，不再介绍方式2</p>
+<h2 id="虚拟机快照"><a href="#虚拟机快照" class="headerlink" title="虚拟机快照"></a>虚拟机快照</h2><hr>
+<p>在拍摄快照时，保留虚拟机的状态，以便反复恢复为相同的状态。快照捕获拍摄快照时的完整虚拟机状态，包括虚拟机内存、虚拟机设置以及所有虚拟磁盘的状态。</p>
+<p>1，创建虚拟机快照<br>在菜单栏中，点击拍摄此虚拟机快照，弹出提示框，输入快照名称和描述内容</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803094908.png" alt="image.png"></p>
+<p>2，恢复到已有快照<br>点击菜单中的快照管理器  选择已经保存的快照节点，点击【转到】  提示：恢复此快照后，当前状态丢失。点击【是】  开始恢复到虚拟机之前的快照位置</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803094934.png" alt="image.png"></p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803095008.png" alt="image.png"></p>
+<h2 id="虚拟机删除"><a href="#虚拟机删除" class="headerlink" title="虚拟机删除"></a>虚拟机删除</h2><hr>
+<p>用  vmware 进行移除，再点击菜单-&gt;磁盘删除即可</p>
+<p>或者直接手动删除虚拟系统对应的文件夹即可。</p>
+<h2 id="虚拟机的三种网络连接方式"><a href="#虚拟机的三种网络连接方式" class="headerlink" title="虚拟机的三种网络连接方式"></a>虚拟机的三种网络连接方式</h2><hr>
+<p>桥接模式是将主机网卡直接与虚拟机网卡相连，利用虚拟网桥进行通信，在桥接的作用下，相当于把物理主机虚拟为一个交换机，所有设置了桥接的虚拟主机连接到此虚拟交换机上，所以设置了桥接模式的虚拟主机与虚拟主机之间可以相互访问而不冲突，如果虚拟主机需要联网则需要将虚拟主机的DNS与网关和本地主机网卡一致</p>
+<p>Nat本身的意思为网络地址转换即将内网地址转换为公网地址，因此使用nat可以节省ip资源，但是又想要虚拟机可以联网，那么使用nat模式是最好的选择，Nat模式使用虚拟nat设备和虚拟DHCP服务器与虚拟网卡相连，而虚拟nat设备和虚拟DHCP服务器与主机网卡相连，Vmnet 8与主机上的VMware Network AdapterVMnet8相连，所以主机与虚拟机直接可以相互通信。</p>
+<p>仅主机模式其实就是省略了NAT设备，因此这种模式无法与访问外网，这种模式是使用VMware Network Adapter VMnet1虚拟网卡与VMware1虚拟交换机相连，因此在这种模式下，主机与虚拟机之间可以相互通信，在同一网段，相当于虚拟机本身成为一个独立的个体，但是只能是主机与虚拟机之间相互通信。</p>
+<h2 id="服务器远程管理工具FinalShell"><a href="#服务器远程管理工具FinalShell" class="headerlink" title="服务器远程管理工具FinalShell"></a>服务器远程管理工具FinalShell</h2><hr>
+<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><p><strong>FinalShell</strong>是一款美观易用、功能强大的国产网络服务管理软件，十分实用和方便，简单大方的界面设计让用户一目了然。主要是通过命令行操作服务器。</p>
+<h3 id="连接远程-linux-服务器-用户名密码方式"><a href="#连接远程-linux-服务器-用户名密码方式" class="headerlink" title="连接远程 linux 服务器(用户名密码方式)"></a>连接远程 linux 服务器(用户名密码方式)</h3><p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803095438.png" alt="image.png|475"></p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803113824.png" alt="image.png|375"></p>
+<p>这一过程遇到了一系列问题，见：</p>
+<p><a href="/2023/08/03/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6/FinalShell%E8%BF%9E%E6%8E%A5%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E7%B3%BB%E5%88%97%E9%97%AE%E9%A2%98/">FinalShell连接虚拟机遇到的一系列问题</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://duoladeameng.github.io/dyc">Dong Yichang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://duoladeameng.github.io/dyc/2023/08/03/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6%E7%9A%84%E4%BD%BF%E7%94%A8/">https://duoladeameng.github.io/dyc/2023/08/03/虚拟机软件/虚拟机软件的使用/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://duoladeameng.github.io/dyc" target="_blank">Blog Site Of Dyc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/dyc/tags/Linux/">Linux</a></div><div class="post_share"><div class="social-share" data-image="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801133213.png" data-sites="wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/dyc/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/dyc/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/dyc/2023/08/03/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6/FinalShell%E8%BF%9E%E6%8E%A5%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E7%B3%BB%E5%88%97%E9%97%AE%E9%A2%98/" title="FinalShell连接虚拟机遇到的一系列问题"><img class="cover" src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801144749.png" onerror="onerror=null;src='/dyc/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">FinalShell连接虚拟机遇到的一系列问题</div></div></a></div><div class="next-post pull-right"><a href="/dyc/2023/08/03/Python%E8%AF%AD%E6%B3%95/%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1%E4%B8%8E%E8%BF%AD%E4%BB%A3%E5%99%A8/" title="可迭代对象与迭代器"><img class="cover" src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801133213.png" onerror="onerror=null;src='/dyc/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">可迭代对象与迭代器</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/dyc/2023/08/03/Linux/%E5%9F%BA%E4%BA%8EUbuntu14.04%E6%90%AD%E5%BB%BAbochs%E4%B8%8B%E7%9A%84Linux0.11%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/" title="基于Ubuntu14.04搭建bochs下的Linux0.11运行环境"><img class="cover" src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801133213.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">基于Ubuntu14.04搭建bochs下的Linux0.11运行环境</div></div></a></div><div><a href="/dyc/2023/08/03/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6/FinalShell%E8%BF%9E%E6%8E%A5%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E7%B3%BB%E5%88%97%E9%97%AE%E9%A2%98/" title="FinalShell连接虚拟机遇到的一系列问题"><img class="cover" src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801144749.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-03</div><div class="title">FinalShell连接虚拟机遇到的一系列问题</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/mmexport1690774702044.gif" onerror="this.onerror=null;this.src='/dyc/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Dong Yichang</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/dyc/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/dyc/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/dyc/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8A%80%E6%9C%AF%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">虚拟机技术的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B-VMWARE%E5%AE%89%E8%A3%85Ubuntu14"><span class="toc-number">2.</span> <span class="toc-text">案例:VMWARE安装Ubuntu14</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-number">2.1.</span> <span class="toc-text">新建虚拟机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.2.</span> <span class="toc-text">安装操作系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%85%8B%E9%9A%86"><span class="toc-number">3.</span> <span class="toc-text">虚拟机克隆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%BF%AB%E7%85%A7"><span class="toc-number">4.</span> <span class="toc-text">虚拟机快照</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%88%A0%E9%99%A4"><span class="toc-number">5.</span> <span class="toc-text">虚拟机删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E4%B8%89%E7%A7%8D%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E6%96%B9%E5%BC%8F"><span class="toc-number">6.</span> <span class="toc-text">虚拟机的三种网络连接方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7FinalShell"><span class="toc-number">7.</span> <span class="toc-text">服务器远程管理工具FinalShell</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">7.1.</span> <span class="toc-text">作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8B-linux-%E6%9C%8D%E5%8A%A1%E5%99%A8-%E7%94%A8%E6%88%B7%E5%90%8D%E5%AF%86%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="toc-number">7.2.</span> <span class="toc-text">连接远程 linux 服务器(用户名密码方式)</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Dong Yichang</div><div class="footer_custom_text">Hi, welcome to my blog!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/dyc/js/utils.js"></script><script src="/dyc/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/dyc/js/search/local-search.js"></script></div></div></body></html>

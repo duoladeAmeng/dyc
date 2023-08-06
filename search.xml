@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>STL概述</title>
+    <url>/dyc/2023/08/03/C++%E8%AF%AD%E6%B3%95/STL%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<h3 id="STL简介"><a href="#STL简介" class="headerlink" title="STL简介"></a>STL简介</h3><hr>
+<p>STL(标准模板库)最初是一个用于支持C++泛型编程的模板库,1994 年被纳入 C++ 标准，成为 C++ 标准库的一部分。</p>
+<p>由C+ 标准库有多种不同的实现,因此 STL 也有不同的版本，但它们为用户提供的接口都遵守共同的标准。</p>
+<p>STL提供了一些常用的数据结构和算法,这些并不是 STL的全部。</p>
+<p>STL 更重要的意义在于,它定义了一套概念体系,为泛型程序设计提供了逻辑基础。</p>
+<p>STL 中的各个类模板、函数模板的参数都是用这个体系中的概念来规定的。</p>
+<p>使用 STL 的一个模板时所提供的类型参数既可以是 C++ 标准库中已有的类型,也可以是自定义的类型–只要这些类型是所要求概念的模型,因此,STL是一个开放的体系。</p>
+<h3 id="STL的4类基本组件"><a href="#STL的4类基本组件" class="headerlink" title="STL的4类基本组件"></a>STL的4类基本组件</h3><hr>
+<h4 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iterator&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="type">const</span> <span class="type">int</span> N=<span class="number">5</span>;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt;<span class="built_in">s</span>(N);<span class="comment">//容器</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">auto</span>&amp;si:s)</span><br><span class="line">	cin&gt;&gt;si;</span><br><span class="line">	<span class="built_in">transform</span>(s.<span class="built_in">begin</span>(),s.<span class="built_in">end</span>(),<span class="built_in">ostream_iterator</span>&lt;<span class="type">int</span>&gt;(cout,<span class="string">&quot; &quot;</span>),<span class="built_in">negate</span>&lt;<span class="type">int</span>&gt;());</span><br><span class="line">	cout&lt;&lt;endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h4><p>容器(container)是<code>容纳、包含一组元素的对象</code>。</p>
+<p>容器类库中包括13 种基本容器:向量(<code>vector</code>)、双端队列(<code>deque</code>),列表(<code>list</code>),单向链表(<code>forward_list</code>),数组(<code>array</code>),集合(<code>set</code>).多重集合(<code>multiset</code>)、映射(<code>map</code>)多重映射(<code>multimap</code>),以及后面四种容器的无序形式<code>unorder_map</code>、<code>unorder_set</code>,<code>unorder _multimap</code>,<code>unorder_multiset</code> 等。</p>
+<p>这13种容器可以分为两种基本类型:顺序容器(sequence container)和关联容器(associative container)。<br>顺序容器将一组具有相同类型的元素以严格的线性形式组织起来,向量、双端队列、列表、单向链表和数组容器就属于这一种。<br>关联容器具有根据一组索引来快速提取元素的能力,集合和映射容器就属于这一种。根据元素的组织方式,关联容器可分为有序和无序,其中有序容器中键(key)按顺序存储,无序容器则使用哈希函数组织元素。<br>使用不同的容器,需要包含不同的头文件。</p>
+<h4 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h4><p>迭代器(iterator)提供了顺序访同容器中每个元素的方法。</p>
+<p>对迭代器可以使用<code>++</code>运算符来获得指向下一个元素的迭代器,可以使用<code>*</code>运算符访问一个迭代器所指向的元素。</p>
+<p>如果元素类型是类或结构体,还可以使用<code>-&gt;</code>运算符直接访问该元素的一个成员,有些迭代器还支持通过<code>--</code>运算符获得指向上一个元素的迭代器。</p>
+<p>指针也具有同样的特性,因此指针本身就是一种迭代器,<code>迭代器是泛化的指针</code>。</p>
+<p>案例中的 <code>s.begin()</code>、<code>s.end()</code>以及 <code>ostream_iterator&lt;int&gt;(cout,&quot; &quot;)</code>都是迭代器。</p>
+<p>使用独立于 STL 容器的迭代器,需要包含头文件<code>&lt;iterator&gt;</code>。</p>
+<h4 id="函数对象"><a href="#函数对象" class="headerlink" title="函数对象"></a>函数对象</h4><p>函数对象(function object)是一个行为类似函数的对象,对它可以像调用函数一样调用。</p>
+<p>任何普通的函数和任何重载了“()”运算符的类的对象都可以作为函数对象使用,<code>函数对象是泛化的函数</code>。</p>
+<p>案例中的 <code>negate&lt;int&gt;()</code>就是一个函数对象。negate 是一个类模板,它重载了“()”运算符接受一个参数,该运算符返回的就是参数的相反数,negate 的模板参数 int 表示的是negate 的“()”运算符接受和返回参数的类型。<br>使用STL的函数对象,需要包含头文件<code>&lt;functional&gt;</code></p>
+<h4 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h4><p>STL包括 70多个算法(algorithm),这些算法覆盖了相当大的应用领域,其中包括查找算法,排序算法，消除算法,计数算法，比较算法,变换算法,置换算法和容器管理等。</p>
+<p>这些算法的一个最重要的特性就是它们的统一性,并且可以广泛用于不同的对象和内置的数据类型。</p>
+<p>案例中调用的 transform 就是一个算法,为了说明该算法的用途,下给出该算法的种实现:</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">InputIt</span>,<span class="keyword">class</span> <span class="title class_">OutputIt</span>,<span class="keyword">class</span> <span class="title class_">UnaryFunction</span>&gt;</span><br><span class="line"><span class="function">OutputIt <span class="title">transform</span><span class="params">(InputIt first,InputIt last, OutputIt result, UnaryFunction op)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(;first !=last;++first,++result)</span><br><span class="line">		*result=<span class="built_in">op</span>(*first);</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>transform算法顺序遍历 first 和 last 两个代器所指向的元素将每个元素的值作为函数对象op 的参数,将op 的返回值通过迭代器 result 顺序输出。遍历完成后 result 选代器指向的是输出的最后一个元素的下一个位置,transform 会将该选代器返回,案例的程序忽略了这个返回值。</p>
+<p>使用STL的算法，需要包含头文件<code>&lt;algorithm&gt;</code>。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><hr>
+<p>STL 把迭代器作为算法的参数通过迭代器来访问容器而不是把容器直按作为算法的参数;<br>STL 把函数对象作为算法的参数而不是把函数所执行的运算作为算法的-部分。<br>这些都是非常成功的设计,它为 STL 提供了极大的灵活性。<br>使用 STL 中提供的或自定义的迭代器和函数对象,配合 STL 的算法,可以组合出各种各样的功能。</p>
+]]></content>
+      <categories>
+        <category>C++语法</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++语法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STL算法</title>
+    <url>/dyc/2023/08/03/C++%E8%AF%AD%E6%B3%95/STL%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><hr>
+<h3 id="不可变序列算法"><a href="#不可变序列算法" class="headerlink" title="不可变序列算法"></a>不可变序列算法</h3><hr>
+<h3 id="可变序列算法"><a href="#可变序列算法" class="headerlink" title="可变序列算法"></a>可变序列算法</h3><hr>
+<h3 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h3><hr>
+<h4 id="sort"><a href="#sort" class="headerlink" title="sort"></a>sort</h4><h6 id="用法"><a href="#用法" class="headerlink" title="用法:"></a><strong>用法:</strong></h6><p>sort是不稳定的排序,底层使用的是快速排序算法，平均时间复杂度为O(nlogn)</p>
+<p>有两种调用方式</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//方式一(默认)	</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">sort</span> <span class="params">(RandomAccessIterator first, RandomAccessIterator last)</span></span>;</span><br><span class="line"><span class="comment">//方式二(自定义)	</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">sort</span> <span class="params">(RandomAccessIterator first, RandomAccessIterator last, Compare comp)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>默认: 两个参数<code>first</code>,<code>last</code>，将<code>[first, last)</code>区间内元素升序排列。</li>
+<li>自定义排序: 需用户指定排序规则<code>Compare comp</code>,将 <code>[first, last)</code>区间内的元素按照用户指定的顺序排列。</li>
+<li>由于在排序过程中涉及到元素_交换_等操作，所以sort函数仅支持<strong>可随机访问</strong>的容器，如数组， string、vector、deque等。</li>
+</ul>
+<h6 id="案例1-升序排列"><a href="#案例1-升序排列" class="headerlink" title="案例1:升序排列"></a><strong>案例1:升序排列</strong></h6><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 方式一、使用数组</span></span><br><span class="line">    <span class="type">int</span> a[<span class="number">10</span>] = &#123;<span class="number">9</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">0</span>&#125;;</span><br><span class="line">    <span class="built_in">sort</span>(a, a + <span class="number">10</span>);  <span class="comment">// 10为元素个数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) cout &lt;&lt; a[i] &lt;&lt; <span class="string">&#x27; &#x27;</span>;		<span class="comment">// 输出排序后数组</span></span><br><span class="line">    cout &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方式二、使用 vector</span></span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; arr = &#123;<span class="number">9</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">0</span>&#125;;</span><br><span class="line">    <span class="built_in">sort</span>(arr.<span class="built_in">begin</span>(), arr.<span class="built_in">end</span>());  <span class="comment">// 10为元素个数</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) cout &lt;&lt; arr[i] &lt;&lt; <span class="string">&#x27; &#x27;</span>;	<span class="comment">// 输出排序后数组</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h6 id="案例2-降序排列"><a href="#案例2-降序排列" class="headerlink" title="案例2:降序排列"></a><strong>案例2:降序排列</strong></h6><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 方式一、使用数组</span></span><br><span class="line">    <span class="type">int</span> a[<span class="number">10</span>] = &#123;<span class="number">9</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">0</span>&#125;;</span><br><span class="line">    <span class="built_in">sort</span>(a, a + <span class="number">10</span>, <span class="built_in">greater</span>&lt;<span class="type">int</span>&gt;());  <span class="comment">// 10为元素个数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) cout &lt;&lt; a[i] &lt;&lt; <span class="string">&#x27; &#x27;</span>;		<span class="comment">// 输出排序后数组</span></span><br><span class="line">    cout &lt;&lt; endl;	<span class="comment">// 输出 9 8 7 6 5 4 3 2 1 0 </span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方式二、使用 vector</span></span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; arr = &#123;<span class="number">9</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">0</span>&#125;;</span><br><span class="line">    <span class="built_in">sort</span>(arr.<span class="built_in">begin</span>(), arr.<span class="built_in">end</span>(), <span class="built_in">greater</span>&lt;<span class="type">int</span>&gt;()); </span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) cout &lt;&lt; arr[i] &lt;&lt; <span class="string">&#x27; &#x27;</span>;	<span class="comment">// 输出排序后数组</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">cmp</span><span class="params">(<span class="type">int</span> num1, <span class="type">int</span> num2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> num1 &gt; num2;     <span class="comment">// 可以简单理解为 &gt;： 降序排列;  &lt; ： 升序排列</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 一、使用数组</span></span><br><span class="line">    <span class="type">int</span> a[<span class="number">10</span>] = &#123;<span class="number">9</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">0</span>&#125;;</span><br><span class="line">    <span class="built_in">sort</span>(a, a + <span class="number">10</span>, cmp);  <span class="comment">// 使用自定义排序函数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) cout &lt;&lt; a[i] &lt;&lt; <span class="string">&#x27; &#x27;</span>;		<span class="comment">// 输出排序后数组</span></span><br><span class="line">    cout &lt;&lt; endl;	<span class="comment">// 输出 9 8 7 6 5 4 3 2 1 0 </span></span><br><span class="line">    <span class="comment">// 二、使用 vector</span></span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; arr = &#123;<span class="number">9</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">0</span>&#125;;</span><br><span class="line">    <span class="built_in">sort</span>(arr.<span class="built_in">begin</span>(), arr.<span class="built_in">end</span>(), cmp);   <span class="comment">// 使用自定义排序函数</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) cout &lt;&lt; arr[i] &lt;&lt; <span class="string">&#x27; &#x27;</span>;	<span class="comment">// 输出排序后数组</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="案例3-复合类型的排序"><a href="#案例3-复合类型的排序" class="headerlink" title="案例3:复合类型的排序"></a><strong>案例3:复合类型的排序</strong></h6><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Student</span> &#123;    <span class="comment">// 学生结构体</span></span><br><span class="line">    string name;    <span class="comment">// 学生姓名</span></span><br><span class="line">    <span class="type">int</span> grade;      <span class="comment">// 学生分数</span></span><br><span class="line">    <span class="built_in">Student</span>();  <span class="comment">// 无参数构造函数</span></span><br><span class="line">    <span class="built_in">Student</span>(string name, <span class="type">int</span> grade) : <span class="built_in">name</span>(name), <span class="built_in">grade</span>(grade) &#123;&#125;;  <span class="comment">// 有参数构造函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">cmp</span><span class="params">(Student s1, Student s2)</span> </span>&#123;  <span class="comment">// 自定义排序</span></span><br><span class="line">    <span class="keyword">if</span> (s1.grade != s2.grade) &#123;     <span class="comment">// 如果学生成绩不同</span></span><br><span class="line">        <span class="keyword">return</span> s1.grade &gt; s2.grade; <span class="comment">// 则按照成绩降序排列</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s1.name &lt; s2.name;   <span class="comment">// 否则按照姓名升序排列</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    vector&lt;Student&gt; studs;</span><br><span class="line">    studs.<span class="built_in">emplace_back</span>(<span class="string">&quot;Bob&quot;</span>, <span class="number">80</span>);</span><br><span class="line">    studs.<span class="built_in">emplace_back</span>(<span class="string">&quot;Ali&quot;</span>, <span class="number">90</span>);</span><br><span class="line">    studs.<span class="built_in">emplace_back</span>(<span class="string">&quot;Ann&quot;</span>, <span class="number">85</span>);</span><br><span class="line">    studs.<span class="built_in">emplace_back</span>(<span class="string">&quot;Liming&quot;</span>, <span class="number">90</span>);</span><br><span class="line">    studs.<span class="built_in">emplace_back</span>(<span class="string">&quot;Trump&quot;</span>, <span class="number">79</span>);</span><br><span class="line">    studs.<span class="built_in">emplace_back</span>(<span class="string">&quot;Fury&quot;</span>, <span class="number">58</span>);</span><br><span class="line">    studs.<span class="built_in">emplace_back</span>(<span class="string">&quot;Jam&quot;</span>, <span class="number">62</span>);</span><br><span class="line">    studs.<span class="built_in">emplace_back</span>(<span class="string">&quot;Lucy&quot;</span>, <span class="number">89</span>);</span><br><span class="line">    <span class="built_in">sort</span>(studs.<span class="built_in">begin</span>(), studs.<span class="built_in">end</span>(), cmp);  <span class="comment">// 排序</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; studs.<span class="built_in">size</span>(); i++) &#123;    <span class="comment">// 输出结果</span></span><br><span class="line">        cout &lt;&lt; studs[i].name &lt;&lt; <span class="string">&quot;\t&quot;</span> &lt;&lt; studs[i].grade &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="数值算法"><a href="#数值算法" class="headerlink" title="数值算法"></a>数值算法</h3><hr>
+]]></content>
+      <categories>
+        <category>C++语法</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>C++语法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++语法:函数指针</title>
+    <url>/dyc/2023/08/02/C++%E8%AF%AD%E6%B3%95/%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/</url>
+    <content><![CDATA[<h3 id="函数指针的概念"><a href="#函数指针的概念" class="headerlink" title="函数指针的概念"></a>函数指针的概念</h3><hr>
+<p>函数的函数名就表示函数的代码在内存中的起始地址。调用函数的通常形式“函数名(参数表)”的实质就是“函数代码首地址(参数表)”</p>
+<p><strong>函数指针就是专门用来存放函数代码首地址的变量</strong>。</p>
+<p>在程序中可以像使用函数名一样使用指向函数的指针来调用函数。</p>
+<p>也就是说一且函数指针指向了某个函数,它与函数名便具有同样的作用。</p>
+<h3 id="函数指针的声明与赋值"><a href="#函数指针的声明与赋值" class="headerlink" title="函数指针的声明与赋值"></a>函数指针的声明与赋值</h3><hr>
+<p>声明一个函数指针时,也需要说明函数的返回值、形式参数列表,其一般语法如下</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">数据类型( * 函数指针名)(形参表)</span><br></pre></td></tr></table></figure>
+
+<p>说明:</p>
+<ul>
+<li>数据类型说明函数指针所指函数的返回值类型;第一个圆括号中的内容指明一个函数指针的名称;形参表则列出了该指针所指函数的形参类型和个数。</li>
+<li>区分下面两个语句：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">int</span> (*p)(<span class="type">int</span> a, <span class="type">int</span> b); <span class="comment">//p是一个指向函数的指针变量，所指函数的返回值类型为整型</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> *<span class="title">p</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;   <span class="comment">//p是函数名，此函数的返回值类型为整型指针</span></span><br></pre></td></tr></table></figure>
+
+
+<p>函数指针在使用之前也要进行赋值,使指针指向一个已经存在的函数代码的起始地址，语法格式为：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">函数指针名=函数名;</span><br></pre></td></tr></table></figure>
+
+<p>等号右边的函数名所指出的必须是一个已经声明过的、和函数指针具有相同返回类型和相同形参表的函数。在赋值之后，就可以通过函数指针名来直接引用这个指针指向的函数。</p>
+<h3 id="函数指针别名"><a href="#函数指针别名" class="headerlink" title="函数指针别名"></a>函数指针别名</h3><hr>
+<p>由于对函数指针的定义在形式上比较复杂，如果在程序中出现多个这样的定义，多次重复这样的定义会相当烦琐,一个很好的解决办法是使用 typedef。例如:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">int</span> <span class="params">( * DoubleIntFunction)</span> <span class="params">(<span class="type">double</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这声明了DoubloIntFunction 为“有一个double 形参、返回类型为int的函数的指针”类型的别名<br>下面，需要声明这一类型的变量时,可以直接使用:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">DoubleIntFunetion funcPtr;</span><br></pre></td></tr></table></figure>
+
+<p>这声明了一个具有该类型的名称为funcPtr 的函数指针。</p>
+<h3 id="函数指针的使用"><a href="#函数指针的使用" class="headerlink" title="函数指针的使用"></a>函数指针的使用</h3><hr>
+<p>函数指针变量常用的用途之一是把指针作为参数传递到其他函数。</p>
+<p>案例:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">max</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span>; <span class="comment">//求最大数</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span>; <span class="comment">//求最小数</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span>; <span class="comment">//求和</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">process</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j, <span class="type">int</span> (*p)(<span class="type">int</span> a, <span class="type">int</span> b))</span></span>; <span class="comment">//应用函数指针</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> x, y;</span><br><span class="line">	cin&gt;&gt;x&gt;&gt;y;</span><br><span class="line">	cout&lt;&lt;<span class="string">&quot;Max is: &quot;</span>;</span><br><span class="line">	<span class="built_in">process</span>(x, y, max);</span><br><span class="line">	cout&lt;&lt;<span class="string">&quot;Min is: &quot;</span>;</span><br><span class="line">	<span class="built_in">process</span>(x, y, min);</span><br><span class="line">	cout&lt;&lt;<span class="string">&quot;Add is: &quot;</span>;</span><br><span class="line">	<span class="built_in">process</span>(x, y, add);</span><br><span class="line">	<span class="built_in">getch</span>();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">max</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x &gt; y ? x : y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x &gt; y ? y : x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x + y;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">process</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j, <span class="type">int</span> (*p)(<span class="type">int</span> a, <span class="type">int</span> b))</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cout&lt;&lt;<span class="built_in">p</span>(i, j)&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>C++语法</category>
+        <category>指针</category>
+      </categories>
+      <tags>
+        <tag>C++语法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>可迭代对象与迭代器</title>
+    <url>/dyc/2023/08/03/Python%E8%AF%AD%E6%B3%95/%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1%E4%B8%8E%E8%BF%AD%E4%BB%A3%E5%99%A8/</url>
+    <content><![CDATA[<h3 id="可迭代对象"><a href="#可迭代对象" class="headerlink" title="可迭代对象"></a>可迭代对象</h3><hr>
+<p>可以直接作用于for循环的数据类型有以下几种  </p>
+<ul>
+<li>一类是集合数据类型，如列表、元组、字符串、字典、集合、range等；</li>
+<li>一类是generator，包括生成器和带yield的generator function。</li>
+</ul>
+<p>这些可以直接作用于for循环的对象统称为可迭代对象：Iterable。</p>
+<p>可以使用isinstance()判断一个对象是否是Iterable对象：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterable  </span><br><span class="line">  </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">isinstance</span>([], Iterable))  </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">isinstance</span>((), Iterable))  </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">isinstance</span>(&#123;&#125;, Iterable))  </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">isinstance</span>(<span class="string">&quot;&quot;</span>, Iterable))  </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">isinstance</span>((x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>)), Iterable))</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h3><hr>
+<p>可以被next()函数调用并不断返回下一个值的对象称为迭代器：Iterator<br>，迭代器一定是可迭代对象，常用的有zip、map、filter、generator、enumerate</p>
+<p>可以使用isinstance()判断一个对象是否是Iterator对象：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections.abc <span class="keyword">import</span> Iterator  </span><br><span class="line">  </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">isinstance</span>([], Iterator))  </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">isinstance</span>((), Iterator))  </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">isinstance</span>(&#123;&#125;, Iterator))  </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">isinstance</span>(<span class="string">&quot;&quot;</span>, Iterator))  </span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">isinstance</span>((x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>)), Iterator))</span><br></pre></td></tr></table></figure>
+
+
+<p>可以被next()函数不断调用并返回下一个值，直到最后抛出StopIteration错误 (表示无法继续返回下一个值了)</p>
+<p>但是不管用哪种形式,只能从前往后正向访问其中的元素,没有任何方法可以再次访问已访问过的元素,也不支持使用下标直接访问其中任意位置的元素。当所有元素访问结束以后,如果需要重新访问其中的元素,必须重新创建该生成器对象。</p>
+<h3 id="Iterable-VS-Iterator"><a href="#Iterable-VS-Iterator" class="headerlink" title="Iterable VS Iterator"></a>Iterable VS Iterator</h3><hr>
+<p>可迭代对象中，生成器都是Iterator对象，但list、dict、str虽然是Iterable，却不是Iterator。</p>
+<ul>
+<li>Python的Iterator对象表示的是一个数据流，Iterator对象可以被next()函数调用并不断返回下一个数据，直到没有数据时抛出StopIteration错误。</li>
+<li>可以把这个数据流看做是一个有序序列，但我们却不能提前知道序列的长度，只能不断通过next()函数实现按需计算下一个数据，所以Iterator的计算是惰性的，只有在需要返回下一个数据时它才会计算。</li>
+<li>Iterator甚至可以表示一个无限大的数据流，例如全体自然数。而使用list是永远不可能存储全体自然数的。</li>
+</ul>
+<p>迭代器一定是可迭代对象</p>
+<p>把生成器转成list、dict、str等可直接用相应构造方法</p>
+<p>把list、dict、str等Iterable变成Iterator可以使用iter()函数(是全局函数)</p>
+<h3 id="for-循环的本质"><a href="#for-循环的本质" class="headerlink" title="for 循环的本质"></a>for 循环的本质</h3><hr>
+<p>Python的for循环本质上就是通过不断调用next()函数实现的</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]:  </span><br><span class="line">    <span class="built_in">print</span>(x)  </span><br><span class="line"><span class="comment"># 实际上完全等价于  </span></span><br><span class="line"><span class="comment"># 首先获得Iterator对象  </span></span><br><span class="line">it = <span class="built_in">iter</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])  </span><br><span class="line"><span class="comment"># 循环:  </span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:  </span><br><span class="line">    <span class="comment"># 获得下一个值  </span></span><br><span class="line">    <span class="keyword">try</span>:  </span><br><span class="line">        x = <span class="built_in">next</span>(it)  </span><br><span class="line">        <span class="built_in">print</span>(x)  </span><br><span class="line">    <span class="comment"># 遇到StopIteration就退出循环  </span></span><br><span class="line">    <span class="keyword">except</span> StopIteration:  </span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Python语法</category>
+        <category>高级数据类型</category>
+      </categories>
+      <tags>
+        <tag>Python语法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于Ubuntu14.04搭建bochs下的Linux0.11运行环境</title>
+    <url>/dyc/2023/08/03/Linux/%E5%9F%BA%E4%BA%8EUbuntu14.04%E6%90%AD%E5%BB%BAbochs%E4%B8%8B%E7%9A%84Linux0.11%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><hr>
+<p>Linux0.11运行环境的搭建本人折腾了很久，原因在于网上许多文章都回避了关键问题，或者说的不全，没有正确的教程，直到看到这篇博客： <a href="https://www.51cto.com/article/446838.html">https://www.51cto.com/article/446838.html</a>  本文内容有所借鉴 在此表示感谢！</p>
+<p>本文所需的所有资源读者可自行下载，也可从本人百度网盘下载，链接如下：</p>
+<p>链接：<a href="https://pan.baidu.com/s/18fygngUC8jCvG9v4X66IfA?pwd=vfyl">https://pan.baidu.com/s/18fygngUC8jCvG9v4X66IfA?pwd=vfyl</a><br>提取码：vfyl </p>
+<h3 id="安装bochs"><a href="#安装bochs" class="headerlink" title="安装bochs"></a>安装bochs</h3><hr>
+<p>1.先去 <a href="http://nchc.dl.sourceforge.net/project/bochs/bochs/2.4.5/bochs-2.4.5.tar.gz">http://nchc.dl.sourceforge.net/project/bochs/bochs/2.4.5/bochs-2.4.5.tar.gz</a> 下载bochs-2.4.5.tar.gz</p>
+<p>2.解压下载的源代码：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo tar zxvf bochs-2.4.5.tar.gz </span><br></pre></td></tr></table></figure>
+
+<p>3.进入bochs-2.4.5目录，运行configure脚本，它会测试你的机器，C&#x2F;C++编译器以及一些库，用来判断何种配置适合于你的机器。运行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo ./configure --enable-debugger --enable-disasm  </span><br></pre></td></tr></table></figure>
+
+<p>（上面–enable-debugger –enable-disasm 是可选项，这两个是开启调试和反汇编功能）</p>
+<p>4.第3步正确运行后，会产生一个Makefile文件，然后：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo make </span><br></pre></td></tr></table></figure>
+
+<p>5.安装：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo make install </span><br></pre></td></tr></table></figure>
+
+<p>至此，bochs安装已经结束。下面是编译安装过程中可能出现的一些问题及解决方法：</p>
+<p><strong>错误A</strong>.configure: error: C++ preprocessor “&#x2F;lib&#x2F;cpp” fails sanity check</p>
+<p>因为Bochs是用C++写的，所以这里要安装GNU gcc&#x2F;g++编译器。</p>
+<p><strong>解决办法：</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get install build-essential   </span><br><span class="line">sudo apt-get install g++  </span><br></pre></td></tr></table></figure>
+
+<p><strong>错误B</strong>.checking for default gui on this platform… x11</p>
+<p>ERROR: X windows gui was selected, but X windows libraries were not found.</p>
+<p><strong>解决办法：</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get install xorg-dev   </span><br></pre></td></tr></table></figure>
+
+<p><strong>错误C</strong>.ERROR: pkg-config was not found, or unable to access the gtk+-2.0 package.</p>
+<p><strong>解决办法：</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get install libgtk2.0-dev   </span><br></pre></td></tr></table></figure>
+
+<p><strong>错误D.</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">make的时候提示 /usr/bin/ld: gui/libgui.a(gtk_enh_dbg_osdep.o): undefined   </span><br><span class="line">reference to symbol   pthread_create@@GLIBC_2.1   //   </span><br><span class="line">lib/i386-linux-gnu/libpthread.so.0: error adding symbols: DSO missing   </span><br><span class="line">from command line collect2: error: ld r </span><br></pre></td></tr></table></figure>
+
+<p><strong>解决方法：</strong></p>
+<p>在makefile的libs中添加如下内容 ：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">-lz -lrt -lm -lpthread </span><br></pre></td></tr></table></figure>
+
+
+
+<p>在当前目录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">bochs</span><br></pre></td></tr></table></figure>
+
+<p>出现：</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803144540.png" alt="image.png|500"></p>
+<p>安装成功！</p>
+<h3 id="制作软盘"><a href="#制作软盘" class="headerlink" title="制作软盘"></a>制作软盘</h3><hr>
+<p>编译以后的bochs2.4.5文件夹下会有一个bximage可执行文件,在终端运行：</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803144734.png" alt="image.png|500"></p>
+<p>按照上面的步骤,我们就制作好了一张空的软盘,这个软盘就像我们的硬盘一样,用来存放系统文件的….</p>
+<p>然后写入一个系统镜像,镜像文件可以去下载</p>
+<p><a href="http://www.oldlinux.org/Linux.old/images/bootroot-0.11">http://www.oldlinux.org/Linux.old/images/bootroot-0.11</a></p>
+<p>这个是linux0.11的镜像文件</p>
+<p>然后在终端执行命令把镜像写入我们制作的软盘:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">dd if=/home/freedemos/Downloads/bootroot-0.11 of=a.img </span><br></pre></td></tr></table></figure>
+
+<p>注意:这里执行的dd命令,if&#x3D;你的镜像的路径,of&#x3D;你的软盘的路径,照抄肯定会错….</p>
+<h3 id="编写配置文件并启动"><a href="#编写配置文件并启动" class="headerlink" title="编写配置文件并启动"></a>编写配置文件并启动</h3><hr>
+<p>创建编写配置文件Mybochsrc(名字任意)</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">#注意&#x27;#&#x27;后面为注内容,不是配置文件  </span><br><span class="line">megs:32  </span><br><span class="line">#这个32是模拟器的内存  </span><br><span class="line">romimage:file=/MY/bochs-2.4.5/bios/BIOS-bochs-latest</span><br><span class="line">#这个是BIOS-bochs-latest的路径,自己去慢慢找,应该都不同的  </span><br><span class="line">vgaromimage:file=/MY/bochs-2.4.5/bios/VGABIOS-lgpl-latest</span><br><span class="line">#这个是VGABIOS-lgpl-latest的路径,自己去慢慢找,应该都不同的  </span><br><span class="line">floppya:1_44=a.img,status=inserted </span><br><span class="line">#这个是启动软盘,就是我们刚才做的那个,就在当前目录下  </span><br><span class="line">boot:floppy  </span><br><span class="line">#这个决定boot从软盘启动还是硬盘启动,照抄就好了  </span><br><span class="line">log:bochsout.txt  </span><br><span class="line">#这个是登陆选项照抄  </span><br><span class="line">mouse:enabled=0 </span><br><span class="line">#这个是鼠标选项照抄  </span><br><span class="line">#选项还有很多,想了解更多可以参照原始的.bochsrc,这是个隐形文件,命令行下ls -a就能看到了 </span><br></pre></td></tr></table></figure>
+
+
+<p>有了上面那些基本配置以后,我们就能从bochs启动linux0.11了,下面执行命令:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">./bochs -f Mybochsrc</span><br></pre></td></tr></table></figure>
+
+<p>然后就出现这界面:</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803145056.png" alt="image.png|500"></p>
+<p>选择6,继续:</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803145126.png" alt="image.png|500"></p>
+<p>然后我们在终端中输入c,在确定,就会正常了.</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803145446.png" alt="image.png"></p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>Linux 0.11内核</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>图的存储实现--链式前向星</title>
+    <url>/dyc/2023/08/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%9B%BE%E7%9A%84%E5%AD%98%E5%82%A8%E5%AE%9E%E7%8E%B0--%E9%93%BE%E5%BC%8F%E5%89%8D%E5%90%91%E6%98%9F/</url>
+    <content><![CDATA[<h4 id="数据结构要素"><a href="#数据结构要素" class="headerlink" title="数据结构要素"></a>数据结构要素</h4><hr>
+<p>边集数组：edge，<code>edge[i]</code> 表示第i条边</p>
+<p>头结点数组：head，<code>head[i]</code>表示i为起点的最后一条边的下标（在边集数组edge中的下标），这里的最后一条是输入的最后一条以i为端点的边，也就是说以<code>head[i]</code>开头的边，一定有一个端点是i</p>
+<p>边的属性:</p>
+<ul>
+<li>边的权值w</li>
+<li>边的终点to</li>
+<li>下一条边在边集数组中的下标next</li>
+</ul>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801123435.png" alt="image.png|143"></p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><hr>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">100</span>;<span class="comment">//最多max个顶点</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Edge</span> &#123;</span><br><span class="line">    <span class="type">int</span> w, to, next;</span><br><span class="line">&#125;edge[(maxn<span class="number">-1</span>)/<span class="number">2</span>*maxn];          <span class="comment">// 边数组</span></span><br><span class="line"><span class="type">int</span> head[maxn+<span class="number">1</span>];       <span class="comment">// head数组</span></span><br><span class="line"><span class="type">int</span> n;<span class="comment">// n为结点数量</span></span><br><span class="line"><span class="type">int</span> m;<span class="comment">//m为边数</span></span><br><span class="line"><span class="type">int</span> cnt=<span class="number">0</span>;<span class="comment">//cnt记录已经输入的边的数量，是当前要输入的边在边集数组中的下标</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) </span><br><span class="line">        head[i] = <span class="number">-1</span>;  <span class="comment">// head初始都为-1</span></span><br><span class="line">    cnt = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="加边"><a href="#加边" class="headerlink" title="加边"></a>加边</h4><hr>
+<p>类似头插法</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">add_edge</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> v, <span class="type">int</span> w)</span> </span>&#123;</span><br><span class="line">    edge[cnt].to = v;</span><br><span class="line">    edge[cnt].w = w;</span><br><span class="line">    edge[cnt].next = head[u];</span><br><span class="line">    head[u] = cnt++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801131817.png" alt="image.png|400"></p>
+<h4 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h4><hr>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = head[i]; ~j; j = edge[j].next) &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;start=&quot;</span> &lt;&lt; i &lt;&lt; <span class="string">&quot; to=&quot;</span> &lt;&lt; edge[j].to &lt;&lt; <span class="string">&quot; w=&quot;</span> &lt;&lt; edge[j].w &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h4><hr>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">100</span>;</span><br><span class="line"><span class="type">int</span> h[maxn + <span class="number">1</span>];</span><br><span class="line"><span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="type">int</span> w;</span><br><span class="line">	<span class="type">int</span> to;</span><br><span class="line">	<span class="type">int</span> next;</span><br><span class="line">&#125;edge[(maxn<span class="number">-1</span>)/<span class="number">2</span>*maxn];</span><br><span class="line"><span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> n, m;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">		h[i] = <span class="number">-1</span>;</span><br><span class="line">	cnt = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">add_edge</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> v, <span class="type">int</span> w)</span> </span>&#123;</span><br><span class="line">	edge[cnt].w = w;</span><br><span class="line">	edge[cnt].to = v;</span><br><span class="line">	edge[cnt].next = h[u];</span><br><span class="line">	h[u] = cnt++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;以&quot;</span> &lt;&lt; i &lt;&lt; <span class="string">&quot;为起点的边:&quot;</span>&lt;&lt;endl;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> j = h[i]; j != <span class="number">-1</span>; j = edge[j].next)</span><br><span class="line">			cout &lt;&lt; i&lt;&lt;<span class="string">&quot;--&gt;&quot;</span>&lt;&lt;edge[j].to&lt;&lt; <span class="string">&quot;  w:&quot;</span>&lt;&lt;edge[j].w &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">	<span class="built_in">init</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">		<span class="type">int</span> u, v, w;</span><br><span class="line">		cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;</span><br><span class="line">		<span class="built_in">add_edge</span>(u,v,w);</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;````````````````````````&quot;</span> &lt;&lt; endl;</span><br><span class="line">	<span class="built_in">print</span>();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//输入样例</span></span><br><span class="line"><span class="comment">// 5 7</span></span><br><span class="line"><span class="comment">//1 2 1</span></span><br><span class="line"><span class="comment">//2 3 3</span></span><br><span class="line"><span class="comment">//3 4 3</span></span><br><span class="line"><span class="comment">//1 3 4</span></span><br><span class="line"><span class="comment">//4 1 5</span></span><br><span class="line"><span class="comment">//1 5 6</span></span><br><span class="line"><span class="comment">//4 5 7</span></span><br></pre></td></tr></table></figure>
+
+
+<p>可写成以下等价形式</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">100</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxe = (maxn - <span class="number">1</span>) / <span class="number">2</span> * maxn;</span><br><span class="line"><span class="type">int</span> h[maxn + <span class="number">1</span>];</span><br><span class="line"><span class="type">int</span> w[maxe];</span><br><span class="line"><span class="type">int</span> to[maxe];</span><br><span class="line"><span class="type">int</span> ne[maxe];</span><br><span class="line"><span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> n, m;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">		h[i] = <span class="number">-1</span>;</span><br><span class="line">	cnt = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">add_edge</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> v, <span class="type">int</span> weight)</span> </span>&#123;</span><br><span class="line">	w[cnt] = weight;</span><br><span class="line">	to[cnt] = v;</span><br><span class="line">	ne[cnt] = h[u];</span><br><span class="line">	h[u] = cnt++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;以&quot;</span> &lt;&lt; i &lt;&lt; <span class="string">&quot;为起点的边:&quot;</span>&lt;&lt;endl;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> j = h[i]; j != <span class="number">-1</span>; j = ne[j])</span><br><span class="line">			cout &lt;&lt; i&lt;&lt;<span class="string">&quot;--&gt;&quot;</span>&lt;&lt;to[j]&lt;&lt; <span class="string">&quot;  w:&quot;</span>&lt;&lt;w[j] &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">	<span class="built_in">init</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">		<span class="type">int</span> u, v, w;</span><br><span class="line">		cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;</span><br><span class="line">		<span class="built_in">add_edge</span>(u,v,w);</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;````````````````````````&quot;</span> &lt;&lt; endl;</span><br><span class="line">	<span class="built_in">print</span>();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//输入样例</span></span><br><span class="line"><span class="comment">// 5 7</span></span><br><span class="line"><span class="comment">//1 2 1</span></span><br><span class="line"><span class="comment">//2 3 3</span></span><br><span class="line"><span class="comment">//3 4 3</span></span><br><span class="line"><span class="comment">//1 3 4</span></span><br><span class="line"><span class="comment">//4 1 5</span></span><br><span class="line"><span class="comment">//1 5 6</span></span><br><span class="line"><span class="comment">//4 5 7</span></span><br></pre></td></tr></table></figure>
+<h4 id="案例模拟"><a href="#案例模拟" class="headerlink" title="案例模拟"></a>案例模拟</h4><hr>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801132012.png" alt="image.png"></p>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+        <category>图</category>
+      </categories>
+      <tags>
+        <tag>图</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>KMP算法攻略</title>
+    <url>/dyc/2023/07/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/KMP%E7%AE%97%E6%B3%95%E6%94%BB%E7%95%A5/</url>
+    <content><![CDATA[<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><hr>
+<p>给两个字符串S和T(长度分别是n和m)，请你在S字符串中找出T字符串的第一个匹配项的下标（下标从 0 开始）。如果T不是S的一部分，则返回-1。<br>在严蔚敏的教材中，下标从 1 开始。如果T不是S的一部分，则返回0。</p>
+<p>上述操作称为子串的定位，即<code>模式匹配</code>。</p>
+<p>这里不讨论解决上述问题的BF算法，并默认读者会了BF算法，介绍KMP算法。</p>
+<p>为了展开介绍，不得不先引入这个概念：<code>串的最长相等前后缀的长度</code>。</p>
+<ul>
+<li>前缀: &#x3D;&#x3D;不包括最后一个字符&#x3D;&#x3D;的所有以第一个字符为开头的连续子串</li>
+<li>后缀: &#x3D;&#x3D;不包括第一个字符&#x3D;&#x3D;的所有以最后一个字符为结尾的连续子串</li>
+<li>最长相等前后缀: 即如字面意思，前缀后缀中，最长的相等连续子串。</li>
+<li>关注&#x3D;&#x3D;最长相等前后缀的长度&#x3D;&#x3D;</li>
+</ul>
+<p>举例如下，对字符串<code>abaabcac</code> </p>
+<ul>
+<li><code>abaabcac</code>的前1个字符组成的子串<code>a</code> 最长的相等连续子串不存在   长度 len(1)&#x3D;0</li>
+<li><code>abaabcac</code>的前2个字符组成的子串<code>ab</code> 最长的相等连续子串不存在   长度 len(2)&#x3D;0</li>
+<li><code>abaabcac</code>的前3个字符组成的子串<code>aba</code> 最长的相等连续子串<code>a</code>   长度 len(3)&#x3D;1</li>
+<li><code>abaabcac</code>的前4个字符组成的子串<code>abaa</code> 最长的相等连续子串<code>a</code>   长度 len(4)&#x3D;1</li>
+<li><code>abaabcac</code>的前5个字符组成的子串<code>abaab</code> 最长的相等连续子串<code>ab</code>   长度 len(5)&#x3D;2</li>
+<li><code>abaabcac</code>的前6个字符组成的子串<code>abaabc</code> 最长的相等连续子串不存在   长度 len(6)&#x3D;0</li>
+<li><code>abaabcac</code>的前7个字符组成的子串<code>abaabca</code> 最长的相等连续子串<code>a</code>   长度 len(7)&#x3D;1</li>
+<li><code>abaabcac</code>的前8个字符组成的子串<code>abaabcac</code> 最长的相等连续子串不存在   长度 len(8)&#x3D;0</li>
+</ul>
+<h3 id="KMP算法的原理"><a href="#KMP算法的原理" class="headerlink" title="KMP算法的原理"></a>KMP算法的原理</h3><hr>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230731233038.png" alt="image.png|475"></p>
+<p>对于BF算法，两个串比较的元素不等时(X和Y位置元素不等)，主串指针X回溯到开始比较位置a的下一个位置a+1，模式串指针Y回溯到开头位置b，开始尝试新的比较。如下图：</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230731232639.png" alt="image.png|475"></p>
+<p>对于KMP算法，主串不回溯，而是利用已经得到的部分匹配的结果，将模式串向右滑动尽可能远的距离后，开始尝试新的比较。<br>已经得到的部分匹配的结果，对于模式串而言，它就是本次不匹配字符Y的前面的所有字符组成的串，就是黄色部分 考虑它的最长相同前后缀(紫色部分)。<br>KMP算法利用了黄色部分的最长相同前后缀这一信息，使X不动，Y回溯到黄色部分最长相同前后缀  的前缀部分最后一个位置的 下一个位置，开始尝试下一次比较。<br>如下图：</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230731233313.png" alt="image.png|500"></p>
+<p>这个过程 在逻辑上 是从主串的c位置开始尝试匹配，实际只是从主串的X位置开始比较。</p>
+<p>要解决一个关键问题：为什么X可以不回溯，即从从主串【a,c) 区间的任意位置开始，都不能成功匹配模式串，下面进行证明：</p>
+<p>从a开始的匹配已经失败，考虑(a,c)，设k是这个开区间的任意一个点</p>
+<p>假设从k开始匹配成功了，假设如下图：</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230731233649.png" alt="image.png|500"></p>
+<p>如果假设成立，可以推出Y之前字符组成的串(黄色部分)的最长公共前后缀是绿色部分，其长度是X-k，<br>事实是黄色部分的最长公共前缀是紫色部分，长度是X-c，X-c&lt;X-k 因为  k&lt;c  这样假设与事实矛盾，假设不成立 所以从主串【a,c) 区间的任意位置开始，都不能成功匹配模式串，所以X不必回溯。<br>如下图：</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230731233954.png" alt="image.png"></p>
+<p>总结上面的分析，两个串比较的元素不等时(主串的X和模式串的Y位置元素不等)，主串指针X不动，<br>模式串指针Y回溯，Y回溯的位置，就是Y的下一个位置，记为<code>next[Y]</code></p>
+<p><code>next[Y]</code>就是Y之前(不含Y)字符组成的串最长相同前后缀中 &#x3D;&#x3D;前缀最后一个字符的下一个位置&#x3D;&#x3D;，<code>next[Y]</code>及其之前字符组成的串的长度就是 Y之前字符组成的串最长相同前后缀的长度+1</p>
+<p><code>next[Y]</code>是Y要回溯的位置，给<code>next[Y</code>]赋下标</p>
+<p>&#x3D;&#x3D;如果下标从0开始， <code>next[Y]</code>的下标值就是<code>[0,Y-1]</code>这段字符串的最长相同前后缀的长度值&#x3D;&#x3D;<br>&#x3D;&#x3D;如果下标从1开始， <code>next[Y]</code>的下标值就是<code>[1,Y-1]</code>这段字符串的最长相同前后缀的长度值+1&#x3D;&#x3D;</p>
+<p>还有一种极端情况，当Y指向模式串第一个字符(0或1)时，那么此时Y不能往前回溯，只能从主串X位置的下一个位置开始，从模式串的Y位置(0或1)开始比较。那<code>next[1]或next[0]</code>的取值该取多少，后面再作讨论。</p>
+<h3 id="next数组的求法"><a href="#next数组的求法" class="headerlink" title="next数组的求法"></a>next数组的求法</h3><hr>
+<p>已知<code>next[i-1]</code>，探讨<code>next[i]</code>的取值范围的上限</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801084800.png" alt="image.png|475"></p>
+<p>假设<code>next[i]&gt;next[i-1]+1</code> ，红色部分所示</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801084858.png" alt="image.png|550"></p>
+<p>可以推出i-1之前的字符的最长相同前后缀大于原来的紫色部分，与事实矛盾，所以 <code>next[i]&lt;=next[i-1]+1</code></p>
+<p>利用<code>next[i-1]</code> 求<code>next[i]</code></p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801084800.png" alt="image.png|475"></p>
+<p>比较<code>next[i-1]</code>处的字符与i-1处的字符</p>
+<ul>
+<li>如果二者相等，那<code>next[i]=next[i-1]+1</code><ul>
+<li>这一过程本质上是利用了i-1之前字符的最长相同前后缀信息</li>
+</ul>
+</li>
+<li>如果二者不相等，那考察是否可以利用<code>next[i-1]</code>之前字符的最长相同前后缀信息，如下图</li>
+</ul>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801085628.png" alt="image.png"></p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801085913.png" alt="image.png"></p>
+<p><code>b=next[a]</code>,比较b处字符与i-1处的字符，后面的过程与上面一样</p>
+<p>用一个变量j记录绿色菱形的位置，求<code>next[i]</code>，初始时，j&#x3D;<code>next[i-1]</code>,比较j处字符与i-1处字符，如果相等，<code>next[i]=j+1</code>；如果不等，<code>j=next[j]</code>，重复上述过程。</p>
+<p>当j指向模式串的第一个字符时，如果j处字符与i-1处字符不等，说明i之前的字符没有最长相同前后缀。</p>
+<p>如果下标从1开始，j&#x3D;1，此时next<code>[i]</code>&#x3D;1，为了与前面的操作统一，<code>j=next[j]</code>，为了与前面的操作统一，<br><code>next[i]=j+1</code>，可以推出j&#x3D;0，即<code>next[1]=0</code></p>
+<p>如果下标从0开始，j&#x3D;0,此时next<code>[i]</code>&#x3D;0，同理可得<code>next[0]=-1</code></p>
+<h3 id="next数组的改进"><a href="#next数组的改进" class="headerlink" title="next数组的改进"></a>next数组的改进</h3><hr>
+<p><code>next[i]</code>是当模式串的i处字符与主串字符不匹配时要回溯的位置，<code>next[i]=j</code>,如果<code>next[i]</code>处的字符与i处的字符相等，这次回溯就是无效的，记第一次回溯为A，因为回溯处的字符也一定匹配失败，这次回溯失败，<br>还要再次进行回溯，记第二次回溯为B</p>
+<p>A是多余的，可以直接回溯到B，即<code>next[i]=next[j]</code></p>
+<p>这就是对next数组的改进</p>
+<h3 id="下标从1开始的实现"><a href="#下标从1开始的实现" class="headerlink" title="下标从1开始的实现"></a>下标从1开始的实现</h3><hr>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">String</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> len;</span><br><span class="line">	<span class="type">char</span> *s;</span><br><span class="line">&#125; String;</span><br><span class="line"></span><br><span class="line">String* <span class="title function_">getString</span><span class="params">(<span class="type">char</span> s[])</span>&#123;</span><br><span class="line">	String *ss=(String *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(String));</span><br><span class="line">	ss-&gt;len=<span class="built_in">strlen</span>(s);</span><br><span class="line">	ss-&gt;s=(<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">char</span>)*ss-&gt;len);</span><br><span class="line">	<span class="type">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;ss-&gt;len;i++)</span><br><span class="line">		ss-&gt;s[i]=s[i ];</span><br><span class="line">	<span class="keyword">return</span> ss;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">char</span> <span class="title function_">getChar</span><span class="params">(String s,<span class="type">int</span> i)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> s.s[i<span class="number">-1</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">getNext</span><span class="params">(<span class="type">int</span> next[],String s)</span>&#123;</span><br><span class="line">	next[<span class="number">1</span>]=<span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> j=<span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> i=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;s.len)&#123;</span><br><span class="line">		<span class="keyword">if</span>(j==<span class="number">0</span>||getChar(s,i)==getChar(s,j))&#123;</span><br><span class="line">			i++;</span><br><span class="line">			j++;</span><br><span class="line">			next[i]=j;</span><br><span class="line">		&#125; <span class="keyword">else</span></span><br><span class="line">			j=next[j];</span><br><span class="line">	&#125;</span><br><span class="line">&#125; </span><br><span class="line"><span class="type">void</span> <span class="title function_">getNextVal</span><span class="params">(<span class="type">int</span> nextval[],String s)</span>&#123;</span><br><span class="line">	nextval[<span class="number">1</span>]=<span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> j=<span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> i=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;s.len)&#123;</span><br><span class="line">		<span class="keyword">if</span>(j==<span class="number">0</span>||getChar(s,i)==getChar(s,j))&#123;</span><br><span class="line">			i++;</span><br><span class="line">			j++;</span><br><span class="line">			<span class="keyword">if</span>(getChar(s,i)!=getChar(s,j))</span><br><span class="line">				nextval[i]=j;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				nextval[i]=nextval[j];</span><br><span class="line">		&#125; <span class="keyword">else</span></span><br><span class="line">			j=nextval[j];</span><br><span class="line">	&#125;</span><br><span class="line">&#125; </span><br><span class="line"><span class="type">int</span> <span class="title function_">kmp</span><span class="params">(String s1,String s2)</span>&#123;</span><br><span class="line">	<span class="type">int</span> next[s2.len+<span class="number">1</span>];</span><br><span class="line">	getNextVal(next,s2);</span><br><span class="line">	<span class="type">int</span> i=<span class="number">1</span>;</span><br><span class="line">	<span class="type">int</span> j=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;=s1.len&amp;&amp;j&lt;=s2.len)&#123;</span><br><span class="line">		<span class="keyword">if</span>(j==<span class="number">0</span>||getChar(s1,i)==getChar(s2,j))&#123;</span><br><span class="line">			i++;</span><br><span class="line">			j++;</span><br><span class="line">		&#125;<span class="keyword">else</span></span><br><span class="line">			j=next[j];</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> j&gt;s2.len?i-j+<span class="number">1</span>:<span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="下标从0开始的实现"><a href="#下标从0开始的实现" class="headerlink" title="下标从0开始的实现"></a>下标从0开始的实现</h3><hr>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">getNext</span><span class="params">(<span class="type">int</span> next[],<span class="type">char</span> *s)</span>&#123;</span><br><span class="line">	next[<span class="number">0</span>]=<span class="number">-1</span>;</span><br><span class="line">	<span class="type">int</span> j=<span class="number">-1</span>;</span><br><span class="line">	<span class="type">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;<span class="built_in">strlen</span>(s)<span class="number">-1</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span>(j==<span class="number">-1</span>||s[i]==s[j])&#123;</span><br><span class="line">			i++;</span><br><span class="line">			j++;</span><br><span class="line">			next[i]=j;</span><br><span class="line">		&#125; <span class="keyword">else</span></span><br><span class="line">			j=next[j];</span><br><span class="line">	&#125;</span><br><span class="line">&#125; </span><br><span class="line"><span class="type">void</span> <span class="title function_">getNextVal</span><span class="params">(<span class="type">int</span> nextval[],<span class="type">char</span>* s)</span>&#123;</span><br><span class="line">	nextval[<span class="number">0</span>]=<span class="number">-1</span>;</span><br><span class="line">	<span class="type">int</span> j=<span class="number">-1</span>;</span><br><span class="line">	<span class="type">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;<span class="built_in">strlen</span>(s)<span class="number">-1</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span>(j==<span class="number">-1</span>||s[i]==s[j])&#123;</span><br><span class="line">			i++;</span><br><span class="line">			j++;</span><br><span class="line">			<span class="keyword">if</span>(s[i]!=s[j])</span><br><span class="line">				nextval[i]=j;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				nextval[i]=nextval[j];</span><br><span class="line">		&#125; <span class="keyword">else</span></span><br><span class="line">			j=nextval[j];</span><br><span class="line">	&#125;</span><br><span class="line">&#125; </span><br><span class="line"><span class="type">int</span> <span class="title function_">kmp</span><span class="params">(<span class="type">char</span>* s1,<span class="type">char</span>* s2)</span>&#123;</span><br><span class="line">	<span class="type">int</span> next[<span class="built_in">strlen</span>(s2)];</span><br><span class="line">	getNextVal(next,s2);</span><br><span class="line">	<span class="type">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> j=<span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> len1=<span class="built_in">strlen</span>(s1);</span><br><span class="line">	<span class="type">int</span> len2=<span class="built_in">strlen</span>(s2);</span><br><span class="line">	<span class="keyword">while</span>(i&lt;len1&amp;&amp;j&lt;len2)&#123;</span><br><span class="line">		<span class="keyword">if</span>(j==<span class="number">-1</span>||s1[i]==s2[j])&#123;</span><br><span class="line">			i++;</span><br><span class="line">			j++;</span><br><span class="line">		&#125;<span class="keyword">else</span></span><br><span class="line">			j=next[j];</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> j&gt;len2<span class="number">-1</span>?i-j:<span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>数据结构</category>
+        <category>串</category>
+      </categories>
+      <tags>
+        <tag>KMP算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>链表系列题目</title>
+    <url>/dyc/2023/08/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E7%9B%AE/%E9%93%BE%E8%A1%A8/</url>
+    <content><![CDATA[<blockquote>
+<p>说明:将对此篇内容随时补充完善</p>
+</blockquote>
+<h1 id="单链表反转"><a href="#单链表反转" class="headerlink" title="单链表反转"></a>单链表反转</h1><hr>
+<h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><p><a href="https://www.nowcoder.com/practice/75e878df47f24fdc9dc3e400ec6058ca?tpId=295&tqId=23286&ru=/exam/oj&qru=/ta/format-top101/question-ranking&sourceUrl=/exam/oj">https://www.nowcoder.com/practice/75e878df47f24fdc9dc3e400ec6058ca?tpId=295&amp;tqId=23286&amp;ru=/exam/oj&amp;qru=/ta/format-top101/question-ranking&amp;sourceUrl=%2Fexam%2Foj</a></p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">给定一个单链表的头结点pHead(该头节点是有值的)，长度为n，反转该链表后，返回新链表的表头。</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>双指针</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230703184552.png" alt="image.png"></p>
+<blockquote>
+<p>1.p2指向当前要反转的节点,因为是反转,所以p2最终指向它前一个节点,用p1记录;<br>2.初始时,当前要反转的节点是链表第一个节点,所以p2指向它,经反转后,第一个节点的next指向NULL,故p2的前一个节点p1指向NULL;<br>3.一次反转操作之后,下次要反转的节点的地址会丢失,故需要提前记录,当前要反转的节点是p2,故下次要反转的节点是p2的下一个节点,即p2-&gt;next;<br>4.当p2为NULL时,代表p2指向链表最后一个节点的next,链表的最后一个节点刚反转完成,即链表的反转操作已经完成,反转后链表的头节点是当前p2的上一个节点,即p1。</p>
+</blockquote>
+<p>递归</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *  int val;</span></span><br><span class="line"><span class="comment"> *  struct ListNode *next;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @param head ListNode类</span></span><br><span class="line"><span class="comment"> * @return ListNode类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">ReverseList</span><span class="params">(<span class="keyword">struct</span> ListNode* head )</span> &#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">p1</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">p2</span> =</span> head;</span><br><span class="line">    <span class="keyword">while</span> (p2) &#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">t</span> =</span> p2-&gt;next;</span><br><span class="line">        p2-&gt;next = p1;</span><br><span class="line">        p1 = p2;</span><br><span class="line">        p2 = t;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> p1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h4><p>双指针法：时间复杂度O(n) 空间复杂度O(1)</p>
+<h1 id="单链表内指定区间反转"><a href="#单链表内指定区间反转" class="headerlink" title="单链表内指定区间反转"></a>单链表内指定区间反转</h1><hr>
+<h4 id="描述-1"><a href="#描述-1" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/reverse-linked-list-ii/">https://leetcode.cn/problems/reverse-linked-list-ii/</a></p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">将一个节点数为 size 链表 m 位置到 n 位置之间的区间反转，要求时间复杂度 O(n)，空间复杂度 O(1)。 </span><br><span class="line"></span><br><span class="line">例如：  </span><br><span class="line">给出的链表为 1→2→3→4→5→NULL,m=2,n=4,  </span><br><span class="line">返回 1→4→3→2→5→NULL.  </span><br><span class="line">  </span><br><span class="line">数据范围： 链表长度 0&lt;size≤1000，0&lt;m≤n≤size，链表中每个节点的值满足∣val∣≤1000</span><br><span class="line"></span><br><span class="line">要求：时间复杂度 O(n) ，空间复杂度 O(n)</span><br><span class="line"></span><br><span class="line">进阶：时间复杂度 O(n)，空间复杂度  O(1)</span><br></pre></td></tr></table></figure>
+
+<h4 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h4><h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *	int val;</span></span><br><span class="line"><span class="comment"> *	struct ListNode *next;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @param head ListNode类 </span></span><br><span class="line"><span class="comment"> * @param m int整型 </span></span><br><span class="line"><span class="comment"> * @param n int整型 </span></span><br><span class="line"><span class="comment"> * @return ListNode类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">reverseBetween</span><span class="params">(<span class="keyword">struct</span> ListNode* head, <span class="type">int</span> m, <span class="type">int</span> n )</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(m==n)</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">pmpre</span>=</span><span class="literal">NULL</span>;<span class="comment">//第m个节点的前一个节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">pnnext</span>=</span><span class="literal">NULL</span>;<span class="comment">//第n节点的下一个节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">pm</span>=</span>head;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">pn</span>=</span>head;</span><br><span class="line">    n-=m;<span class="comment">//从m到n走m-n步</span></span><br><span class="line">    m-=<span class="number">1</span>;<span class="comment">//从1到m要走m-1步</span></span><br><span class="line">    <span class="comment">//找到第m个节点和第m个节点的上一个节点</span></span><br><span class="line">    <span class="keyword">while</span> (m--&gt;<span class="number">0</span>) &#123;</span><br><span class="line">        pmpre=pm;</span><br><span class="line">        pm=pm-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//找到第n个节点和第n个节点的下一个节点</span></span><br><span class="line">    pn=pm;</span><br><span class="line">    <span class="keyword">while</span> (n--&gt;<span class="number">0</span>) &#123;</span><br><span class="line">        pn=pn-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    pnnext=pn-&gt;next;</span><br><span class="line">    <span class="comment">//将m到n的区域反转</span></span><br><span class="line">    pn-&gt;next=<span class="literal">NULL</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">p1</span>=</span><span class="literal">NULL</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">p2</span>=</span>pm;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">record</span>=</span>pm;<span class="comment">//记录反转后的尾节点 因为反转过程中会丢失</span></span><br><span class="line">    <span class="keyword">while</span> (p2) &#123;</span><br><span class="line">         <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">t</span>=</span>p2-&gt;next;</span><br><span class="line">         p2-&gt;next=p1;</span><br><span class="line">         p1=p2;</span><br><span class="line">         p2=t;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//p1是m到n段反转后的头节点</span></span><br><span class="line">    <span class="keyword">if</span>(pmpre)</span><br><span class="line">        pmpre-&gt;next=p1;</span><br><span class="line">    <span class="keyword">else</span> head=p1;<span class="comment">//特殊处理反转区域的头节点是链表头节点</span></span><br><span class="line">    record-&gt;next=pnnext;</span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>增设虚拟头节点：免去特殊处理</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * public class ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode next;</span></span><br><span class="line"><span class="comment"> *     ListNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int val, ListNode next) &#123; this.val = val; this.next = next; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ListNode <span class="title function_">reverse</span><span class="params">(ListNode head)</span>&#123;</span><br><span class="line">        ListNode p1=<span class="literal">null</span>;</span><br><span class="line">        ListNode p2=head;</span><br><span class="line">        <span class="keyword">while</span>(p2!=<span class="literal">null</span>)&#123;</span><br><span class="line">            ListNode t=p2.next;</span><br><span class="line">            p2.next=p1;</span><br><span class="line">            p1=p2;</span><br><span class="line">            p2=t;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> p1;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> ListNode <span class="title function_">reverseBetween</span><span class="params">(ListNode head, <span class="type">int</span> left, <span class="type">int</span> right)</span>&#123;</span><br><span class="line">        ListNode virh=<span class="keyword">new</span> <span class="title class_">ListNode</span>(<span class="number">0</span>,head);</span><br><span class="line">        ListNode p=virh;</span><br><span class="line">        ListNode leftpre=virh;</span><br><span class="line">        ListNode leftp=virh;</span><br><span class="line"></span><br><span class="line">        ListNode rightnext=virh;</span><br><span class="line"></span><br><span class="line">        left--;</span><br><span class="line"></span><br><span class="line">        right-=left;</span><br><span class="line">        <span class="keyword">while</span>(left--!=<span class="number">0</span>)&#123;</span><br><span class="line">            p=p.next;</span><br><span class="line">        &#125;</span><br><span class="line">        leftpre=p;</span><br><span class="line">        leftp=p.next;</span><br><span class="line">        <span class="keyword">while</span>(right--!=<span class="number">0</span>)&#123;</span><br><span class="line">            p=p.next;</span><br><span class="line">        &#125;</span><br><span class="line">        rightnext=p.next;</span><br><span class="line">        p.next=<span class="literal">null</span>;</span><br><span class="line">        leftpre.next=reverse(leftpre.next);</span><br><span class="line">        leftp.next=rightnext;</span><br><span class="line">        <span class="keyword">return</span> virh.next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="复杂度分析-1"><a href="#复杂度分析-1" class="headerlink" title="复杂度分析"></a>复杂度分析</h4><h1 id="单链表中的节点每k个一组反转"><a href="#单链表中的节点每k个一组反转" class="headerlink" title="单链表中的节点每k个一组反转"></a>单链表中的节点每k个一组反转</h1><hr>
+<h4 id="描述-2"><a href="#描述-2" class="headerlink" title="描述"></a>描述</h4><figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">将给出的链表中的节点每 k 个一组翻转,返回翻转后的链表;如果链表中的节点数不是 k 的倍数，将最后剩下的节点保持原样,你不能更改节点中的值，只能更改节点本身。</span><br><span class="line">数据范围: 0≤n≤2000,1≤k≤2000 ，链表中每个元素都满足 0≤val≤1000  </span><br><span class="line">要求空间复杂度 O(1)，时间复杂度 O(n)</span><br><span class="line"></span><br><span class="line">例如：</span><br><span class="line">给定的链表是 1→2→3→4→5</span><br><span class="line">对于 k=2 , 你应该返回 2→1→4→3→5</span><br><span class="line">对于 k=3 , 你应该返回 3→2→1→4→5</span><br></pre></td></tr></table></figure>
+
+<h4 id="思路-2"><a href="#思路-2" class="headerlink" title="思路"></a>思路</h4><p>1.链表分区为已翻转部分+待翻转部分+未翻转部分<br>2.每次翻转前，要确定翻转链表的范围，这个必须通过 k 此循环来确定<br>3.需记录翻转链表前驱和后继，方便翻转完成后把已翻转部分和未翻转部分连接起来<br>4.初始需要两个变量 pre 和 end，pre 代表待翻转链表的前驱，end 代表待翻转链表的末尾<br>5.经过k次循环，end 到达末尾，记录待翻转链表的后继 next &#x3D; end.next<br>6.翻转链表，然后将三部分链表连接起来，然后重置 pre 和 end 指针，然后进入下一次循环<br>7.特殊情况，当翻转部分长度不足 k 时，在定位 end 完成后，end==null，已经到达末尾，说明题目已完成，直接返回即可<br>8.时间复杂度为 O(n∗K) 最好的情况为 O(n) 最差的情况未 O(n^2)<br>9.空间复杂度为 O(1) 除了几个必须的节点指针外，我们并没有占用其他空间</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/866b404c6b0b52fa02385e301ee907fc015742c3766c80c02e24ef3a8613e5ad-k%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8.png"></p>
+<h4 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     struct ListNode *next;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//对长度为n的链表每m一个反转</span></span><br><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">reverse</span><span class="params">(<span class="keyword">struct</span> ListNode* h)</span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">p1</span>=</span><span class="literal">NULL</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">p2</span>=</span>h;</span><br><span class="line">    <span class="keyword">while</span>(p2)&#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">t</span>=</span>p2-&gt;next;</span><br><span class="line">        p2-&gt;next=p1;</span><br><span class="line">        p1=p2;</span><br><span class="line">        p2=t;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> p1;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">reverseKGroup</span><span class="params">(<span class="keyword">struct</span> ListNode* head, <span class="type">int</span> k)</span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">dummy</span>=</span>(<span class="keyword">struct</span> ListNode*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> ListNode));</span><br><span class="line">    dummy-&gt;next=head;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>*<span class="title">pre</span>=</span>dummy;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>*<span class="title">end</span>=</span>dummy;</span><br><span class="line">    <span class="keyword">while</span>(end-&gt;next)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;k&amp;&amp;end!=<span class="literal">NULL</span>;i++) end=end-&gt;next;</span><br><span class="line">        <span class="keyword">if</span>(end==<span class="literal">NULL</span>) <span class="keyword">break</span>;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>*<span class="title">start</span>=</span>pre-&gt;next;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>*<span class="title">next</span>=</span>end-&gt;next;</span><br><span class="line">        end-&gt;next=<span class="literal">NULL</span>;</span><br><span class="line">        pre-&gt;next=reverse(start);</span><br><span class="line">        start-&gt;next=next;</span><br><span class="line">        pre=start;</span><br><span class="line">        end=pre;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dummy-&gt;next;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="合并两个排序链表"><a href="#合并两个排序链表" class="headerlink" title="合并两个排序链表"></a>合并两个排序链表</h1><hr>
+<h4 id="描述-3"><a href="#描述-3" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/merge-two-sorted-lists/">https://leetcode.cn/problems/merge-two-sorted-lists/</a></p>
+<p>将两个升序链表合并为一个新的 <strong>升序</strong> 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。</p>
+<h4 id="思路-3"><a href="#思路-3" class="headerlink" title="思路"></a>思路</h4><p>&#x3D;&#x3D;递归&#x3D;&#x3D; </p>
+<p>&#x3D;&#x3D;迭代&#x3D;&#x3D;</p>
+<h4 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">mergeTwoLists</span><span class="params">(<span class="keyword">struct</span> ListNode* list1, <span class="keyword">struct</span> ListNode* list2)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(list1==<span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> list2; </span><br><span class="line">    <span class="keyword">if</span>(list2==<span class="literal">NULL</span>)</span><br><span class="line">        <span class="keyword">return</span> list1; </span><br><span class="line">    <span class="keyword">if</span>(list1-&gt;val&lt;=list2-&gt;val)&#123;</span><br><span class="line">        list1-&gt;next=mergeTwoLists(list1-&gt;next,list2);</span><br><span class="line">        <span class="keyword">return</span> list1;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        list2-&gt;next=mergeTwoLists(list2-&gt;next,list1);</span><br><span class="line">        <span class="keyword">return</span> list2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ListNode <span class="title function_">mergeTwoLists</span><span class="params">(ListNode l1, ListNode l2)</span> &#123;</span><br><span class="line">        <span class="type">ListNode</span> <span class="variable">prehead</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ListNode</span>(-<span class="number">1</span>);</span><br><span class="line">        <span class="type">ListNode</span> <span class="variable">prev</span> <span class="operator">=</span> prehead;</span><br><span class="line">        <span class="keyword">while</span> (l1 != <span class="literal">null</span> &amp;&amp; l2 != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (l1.val &lt;= l2.val) &#123;</span><br><span class="line">                prev.next = l1;</span><br><span class="line">                l1 = l1.next;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                prev.next = l2;</span><br><span class="line">                l2 = l2.next;</span><br><span class="line">            &#125;</span><br><span class="line">            prev = prev.next;</span><br><span class="line">        &#125;</span><br><span class="line">        prev.next = l1 == <span class="literal">null</span> ? l2 : l1;</span><br><span class="line">        <span class="keyword">return</span> prehead.next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="复杂度分析-2"><a href="#复杂度分析-2" class="headerlink" title="复杂度分析"></a>复杂度分析</h4><h1 id="合并K个升序链表"><a href="#合并K个升序链表" class="headerlink" title="合并K个升序链表"></a>合并K个升序链表</h1><hr>
+<h4 id="描述-4"><a href="#描述-4" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/merge-k-sorted-lists/">https://leetcode.cn/problems/merge-k-sorted-lists/</a></p>
+<p>给你一个链表数组，每个链表都已经按升序排列。<br>请你将所有链表合并到一个升序链表中，返回合并后的链表。</p>
+<p>样例</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">输入：lists = [[1,4,5],[1,3,4],[2,6]]</span><br><span class="line">输出：[1,1,2,3,4,4,5,6]</span><br><span class="line">解释：链表数组如下：</span><br><span class="line">[</span><br><span class="line">  1-&gt;4-&gt;5,</span><br><span class="line">  1-&gt;3-&gt;4,</span><br><span class="line">  2-&gt;6</span><br><span class="line">]</span><br><span class="line">将它们合并到一个有序链表中得到。</span><br><span class="line">1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6</span><br></pre></td></tr></table></figure>
+
+<h4 id="思路-4"><a href="#思路-4" class="headerlink" title="思路"></a>思路</h4><p>&#x3D;&#x3D;基于合并两个排序链表&#x3D;&#x3D;</p>
+<p>&#x3D;&#x3D;&#x3D;&#x3D;</p>
+<h4 id="代码-4"><a href="#代码-4" class="headerlink" title="代码"></a>代码</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * public class ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode next;</span></span><br><span class="line"><span class="comment"> *     ListNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int val, ListNode next) &#123; this.val = val; this.next = next; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ListNode <span class="title function_">mergeKLists</span><span class="params">(ListNode[] lists)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(lists.length==<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(lists.length==<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> lists[<span class="number">0</span>];</span><br><span class="line">        ListNode p=lists[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;lists.length;i++)&#123;</span><br><span class="line">           p= mergeTwoLists(p,lists[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> ListNode <span class="title function_">mergeTwoLists</span><span class="params">(ListNode l1, ListNode l2)</span> &#123;</span><br><span class="line">        <span class="type">ListNode</span> <span class="variable">prehead</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ListNode</span>(-<span class="number">1</span>);</span><br><span class="line">        <span class="type">ListNode</span> <span class="variable">prev</span> <span class="operator">=</span> prehead;</span><br><span class="line">        <span class="keyword">while</span> (l1 != <span class="literal">null</span> &amp;&amp; l2 != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (l1.val &lt;= l2.val) &#123;</span><br><span class="line">                prev.next = l1;</span><br><span class="line">                l1 = l1.next;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                prev.next = l2;</span><br><span class="line">                l2 = l2.next;</span><br><span class="line">            &#125;</span><br><span class="line">            prev = prev.next;</span><br><span class="line">        &#125;</span><br><span class="line">        prev.next = l1 == <span class="literal">null</span> ? l2 : l1;</span><br><span class="line">        <span class="keyword">return</span> prehead.next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="复杂度分析-3"><a href="#复杂度分析-3" class="headerlink" title="复杂度分析"></a>复杂度分析</h4><h1 id="移除链表元素"><a href="#移除链表元素" class="headerlink" title="移除链表元素"></a>移除链表元素</h1><hr>
+<h4 id="描述-5"><a href="#描述-5" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/remove-linked-list-elements/">https://leetcode.cn/problems/remove-linked-list-elements/</a></p>
+<h4 id="思路-5"><a href="#思路-5" class="headerlink" title="思路"></a>思路</h4><p>因为要删除链表节点，需要直到它前一个节点的地址，因此设前后两个指针p1,p2,为了不特殊处理要删除节点是首元节点的情况，设一个虚拟头节点dummy。<br>p2指向待删除节点，p1指向待删除节点的前一个节点。<br>当p2的值等于删除值的时候,<code>p1-&gt;next=p2-&gt;next</code> 表示把p2指向的节点删除,同时p2往后移动一步<code>p2=p2-&gt;next</code><br>当p2的值不等于删除值的时候,只需要把p1 p2都往后移动一步即可<br>循环结束条件是p2等于空</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230718104658.png" alt="image.png|425"></p>
+<h4 id="代码-5"><a href="#代码-5" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     struct ListNode *next;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">removeElements</span><span class="params">(<span class="keyword">struct</span> ListNode* head, <span class="type">int</span> val)</span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">dummy</span>=</span>(<span class="keyword">struct</span> ListNode *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> ListNode));</span><br><span class="line">    dummy-&gt;val=<span class="number">-1</span>;</span><br><span class="line">    dummy-&gt;next=head;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">p1</span>=</span>dummy;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">p2</span>=</span>dummy-&gt;next;</span><br><span class="line">    <span class="keyword">while</span>(p2)&#123;</span><br><span class="line">        <span class="keyword">if</span>(p2-&gt;val==val)&#123;</span><br><span class="line">            p1-&gt;next=p2-&gt;next;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            p1=p2;</span><br><span class="line">        &#125;</span><br><span class="line">        p2=p2-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dummy-&gt;next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="删除链表倒数第n个节点"><a href="#删除链表倒数第n个节点" class="headerlink" title="删除链表倒数第n个节点"></a>删除链表倒数第n个节点</h1><hr>
+<h4 id="描述-6"><a href="#描述-6" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/remove-nth-node-from-end-of-list/">https://leetcode.cn/problems/remove-nth-node-from-end-of-list/</a></p>
+<h4 id="思路-6"><a href="#思路-6" class="headerlink" title="思路"></a>思路</h4><p>设一快一慢两个指针p1,p2，假设p1比p2多走1步，p1指向NULL时,p2指向链表倒数第一个元素，所以p1比p2多走n步，p1指向NULL时,p2指向链表倒数第n个节点。<br>要删除第k个节点，就要把第k-1个节点的next指向k的下一个节点。<br>因此要找到第n个节点的前一个节点倒数第n+1个节点。</p>
+<h4 id="代码-6"><a href="#代码-6" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     struct ListNode *next;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">removeNthFromEnd</span><span class="params">(<span class="keyword">struct</span> ListNode* head, <span class="type">int</span> n)</span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">dummy</span>=</span>(<span class="keyword">struct</span> ListNode *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> ListNode));</span><br><span class="line">    dummy-&gt;next=head;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">p1</span>=</span>dummy;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">p2</span>=</span>dummy;</span><br><span class="line">    n++;</span><br><span class="line">    <span class="keyword">while</span>(n--&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        p1=p1-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(p1)&#123;</span><br><span class="line">        p1=p1-&gt;next;</span><br><span class="line">        p2=p2-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    p2-&gt;next=p2-&gt;next-&gt;next;</span><br><span class="line">    <span class="keyword">return</span> dummy-&gt;next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="删除链表中的节点"><a href="#删除链表中的节点" class="headerlink" title="删除链表中的节点"></a>删除链表中的节点</h1><hr>
+<h4 id="描述-7"><a href="#描述-7" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/delete-node-in-a-linked-list/">https://leetcode.cn/problems/delete-node-in-a-linked-list/</a><br>有一个单链表的 head，我们想删除它其中的一个节点 node。</p>
+<p>给你一个需要删除的节点node。你将无法访问第一个节点head。</p>
+<p>链表的所有值都是唯一的，并且保证给定的节点node不是链表中的最后一个节点。</p>
+<p>删除给定的节点。注意，删除节点并不是指从内存中删除它。这里的意思是：</p>
+<p>给定节点的值不应该存在于链表中。<br>链表中的节点数应该减少 1。<br>node 前面的所有值顺序相同。<br>node 后面的所有值顺序相同。</p>
+<h4 id="思路-7"><a href="#思路-7" class="headerlink" title="思路"></a>思路</h4><p>我的思路 ：后面的依次赋值</p>
+<p>大佬的思路：既然不能先删除自己，那就把自己整容成儿子，再假装自己就是儿子来养活孙子</p>
+<h4 id="代码-7"><a href="#代码-7" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">deleteNode</span><span class="params">(<span class="keyword">struct</span> ListNode* node)</span> &#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">p1</span>=</span>node-&gt;next;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">p2</span>=</span>node;</span><br><span class="line">    <span class="keyword">while</span>(p1-&gt;next)&#123;</span><br><span class="line">        p2-&gt;val=p1-&gt;val;</span><br><span class="line">        p1=p1-&gt;next;</span><br><span class="line">        p2=p2-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    p2-&gt;val=p1-&gt;val;</span><br><span class="line">    p2-&gt;next=<span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">deleteNode</span><span class="params">(<span class="keyword">struct</span> ListNode* node)</span> &#123;</span><br><span class="line">    node-&gt;val=node-&gt;next-&gt;val;</span><br><span class="line">    node-&gt;next=node-&gt;next-&gt;next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h4><p>我的思路O(n)<br>大佬的思路O(1)</p>
+<h1 id="链表的中间结点"><a href="#链表的中间结点" class="headerlink" title="链表的中间结点"></a>链表的中间结点</h1><hr>
+<h4 id="描述-8"><a href="#描述-8" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/middle-of-the-linked-list/">https://leetcode.cn/problems/middle-of-the-linked-list/</a></p>
+<p>给你单链表的头结点 <code>head</code> ，请你找出并返回链表的中间结点。<br>如果有两个中间结点，则返回第二个中间结点。</p>
+<h4 id="思路-8"><a href="#思路-8" class="headerlink" title="思路"></a>思路</h4><h4 id="代码-8"><a href="#代码-8" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">middleNode</span><span class="params">(<span class="keyword">struct</span> ListNode* head)</span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">p1</span>=</span>head;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">p2</span>=</span>head;</span><br><span class="line">    <span class="keyword">while</span>(p2&amp;&amp;p2-&gt;next)&#123;</span><br><span class="line">        p1=p1-&gt;next;</span><br><span class="line">        p2=p2-&gt;next-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> p1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="删除链表的中间节点"><a href="#删除链表的中间节点" class="headerlink" title="删除链表的中间节点"></a>删除链表的中间节点</h1><hr>
+<h4 id="描述-9"><a href="#描述-9" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/delete-the-middle-node-of-a-linked-list/">https://leetcode.cn/problems/delete-the-middle-node-of-a-linked-list/</a></p>
+<p>给你一个链表的头节点head。删除链表的中间节点，并返回修改后的链表的头节点head 。</p>
+<p>长度为 n 链表的中间节点是从头数起第 <code>⌊n / 2⌋</code>个节点（下标从 0 开始），其中 <code>⌊x⌋ </code>表示小于或等于 x 的最大整数。</p>
+<p>对于 n &#x3D; 1、2、3、4 和 5 的情况，中间节点的下标分别是 0、1、1、2 和 2 。</p>
+<h4 id="思路-9"><a href="#思路-9" class="headerlink" title="思路"></a>思路</h4><p>如果先算出链表长度就没意思了，能否用一趟遍历就删除：<br>大致思路:设两个移动速度不同的指针p1,p2，其中一个的速度是另一个的两倍，当快的到链表头时，慢的到链表中间。为了不特殊处理删除首元节点，设虚拟头节点dummy。</p>
+<p>因为要删除中间节点，就要找到中间节点的前一个节点<br>如果快指针p2与慢指针p1 初始指向dummy，那p2到头，p1到中间<br>因此p1初始指向<code>dummy-&gt;next</code> p2到头，p1到中间的前一个节点</p>
+<h4 id="代码-9"><a href="#代码-9" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     struct ListNode *next;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">deleteMiddle</span><span class="params">(<span class="keyword">struct</span> ListNode* head)</span>&#123;</span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">dummy</span>=</span>(<span class="keyword">struct</span> ListNode*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> ListNode));</span><br><span class="line">    dummy-&gt;next=head;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">p1</span>=</span>dummy;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">p2</span>=</span>dummy-&gt;next;</span><br><span class="line">    <span class="keyword">while</span>(p2&amp;&amp;p2-&gt;next)&#123;</span><br><span class="line">        p1=p1-&gt;next;</span><br><span class="line">        p2=p2-&gt;next-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    p1-&gt;next=p1-&gt;next-&gt;next;</span><br><span class="line">    <span class="keyword">return</span> dummy-&gt;next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="删除排序链表的重复元素Ⅰ"><a href="#删除排序链表的重复元素Ⅰ" class="headerlink" title="删除排序链表的重复元素Ⅰ"></a>删除排序链表的重复元素Ⅰ</h1><hr>
+<h4 id="描述-10"><a href="#描述-10" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/remove-duplicates-from-sorted-list/">https://leetcode.cn/problems/remove-duplicates-from-sorted-list/</a></p>
+<p>给定一个已排序的链表的头<code>head</code>，删除所有重复的元素，使每个元素只出现一次。返回已排序的链表。</p>
+<h4 id="思路-10"><a href="#思路-10" class="headerlink" title="思路"></a>思路</h4><p>指定 cur 指针指向头部 head<br>当 cur 和 cur.next 的存在为循环结束条件，当二者有一个不存在时说明链表没有去重复的必要了<br>当 cur.val 和 cur.next.val 相等时说明需要去重，则将 cur 的下一个指针指向下一个的下一个，这样就能达到去重复的效果<br>如果不相等则 cur 移动到下一个位置继续循环</p>
+<h4 id="代码-10"><a href="#代码-10" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">deleteDuplicates</span><span class="params">(<span class="keyword">struct</span> ListNode* head)</span>&#123;</span><br><span class="line">       <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> * <span class="title">cur</span> =</span> head;</span><br><span class="line">        <span class="keyword">while</span>(cur&amp;&amp; cur-&gt;next) &#123;</span><br><span class="line">            <span class="keyword">if</span>(cur-&gt;val == cur-&gt;next-&gt;val) &#123;</span><br><span class="line">                cur-&gt;next = cur-&gt;next-&gt;next;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                cur = cur-&gt;next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="删除排序链表的重复元素Ⅱ📌"><a href="#删除排序链表的重复元素Ⅱ📌" class="headerlink" title="删除排序链表的重复元素Ⅱ📌"></a>删除排序链表的重复元素Ⅱ📌</h1><hr>
+<h4 id="描述-11"><a href="#描述-11" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/">https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/</a></p>
+<h4 id="思路-11"><a href="#思路-11" class="headerlink" title="思路"></a>思路</h4><h4 id="代码-11"><a href="#代码-11" class="headerlink" title="代码"></a>代码</h4><h1 id="链表相交"><a href="#链表相交" class="headerlink" title="链表相交"></a>链表相交</h1><hr>
+<h4 id="描述-12"><a href="#描述-12" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/intersection-of-two-linked-lists-lcci/">https://leetcode.cn/problems/intersection-of-two-linked-lists-lcci/</a></p>
+<p>给你两个单链表的头节点 <code>headA</code> 和 <code>headB</code> ，请你找出并返回两个单链表相交的起始节点。如果两个链表没有交点，返回 <code>null</code> 。</p>
+<h4 id="思路-12"><a href="#思路-12" class="headerlink" title="思路"></a>思路</h4><p>只有当链表headA和headB都不为空时，两个链表才可能相交。因此首先判断链表headA和 headB是否为空，如果其中至少有一个链表为空，则两个链表一定不相交，返回null。</p>
+<p>当链表headA 和headB 都不为空时，创建两个指针pA和pB，初始时分别指向两个链表的头节点<br>headA和headB，然后将两个指针依次遍历两个链表的每个节点。具体做法如下：<br>每步操作需要同时更新指针pA和pB。<br>如果指针pA不为空，则将指针pA移到下一个节点；如果指针pB 不为空，则将指针pB移到下一个节点。<br>如果指针pA 为空，则将指针pA 移到链表headB 的头节点；如果指针pB为空，则将指针<br>pB移到链表headA的头节点。<br>当指针pA 和pB指向同一个节点或者都为空时，返回它们指向的节点或者null。</p>
+<p>证明<br>考虑两种情况，第一种情况是两个链表相交，第二种情况是两个链表不相交。</p>
+<p>情况一：两个链表相交</p>
+<p>链表headA 和headB 的长度分别是m 和n。假设链表headA的不相交部分有a 个节点，链表<br>headB 的不相交部分有b 个节点，两个链表相交的部分有 c 个节点，则有a+c&#x3D;m，b+c&#x3D;n。<br>如果a&#x3D;b，则两个指针会同时到达两个链表相交的节点，此时返回相交的节点；<br>如果a≠b，则指针pA 会遍历完链表headA，指针pB 会遍历完链表headB，两个指针不会同时到达链表的尾节点，然后指针pA 移到链表headB 的头节点，指针pB 移到链表headA 的头节点，然后两个指针继续移动，在指针pA移动了a+c+b 次、指针pB 移动了b+c+a 次之后，两个指针会同时到达两个链表相交的节点，该节点也是两个指针第一次同时指向的节点，此时返回相交的节点。</p>
+<p>情况二：两个链表不相交</p>
+<p>链表headA 和headB 的长度分别是m和n。考虑当m&#x3D;n 和m ≠n 时，两个指针分别会如何移动：<br>m&#x3D;n，则两个指针会同时到达两个链表的尾节点，然后同时变成空值null，此时返回null；<br>m≠n，则由于两个链表没有公共节点，两个指针也不会同时到达两个链表的尾节点，因此两个指针都会遍历完两个链表，在指针pA 移动了m+n 次、指针pB 移动了 n+m 次之后，两个指针会同时变成空值 null，此时返回 null。</p>
+<h4 id="代码-12"><a href="#代码-12" class="headerlink" title="代码"></a>代码</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ListNode <span class="title function_">getIntersectionNode</span><span class="params">(ListNode headA, ListNode headB)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(headA==<span class="literal">null</span>||headB==<span class="literal">null</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        ListNode p1=headA;</span><br><span class="line">        ListNode p2=headB;</span><br><span class="line">        <span class="keyword">while</span>(p1!=p2)&#123;</span><br><span class="line">            p1=p1==<span class="literal">null</span>? headB:p1.next;</span><br><span class="line">            p2=p2==<span class="literal">null</span>? headA:p2.next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> p1;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="判断链表中是否有环📌"><a href="#判断链表中是否有环📌" class="headerlink" title="判断链表中是否有环📌"></a>判断链表中是否有环📌</h1><hr>
+<h1 id="链表中环的入口结点📌"><a href="#链表中环的入口结点📌" class="headerlink" title="链表中环的入口结点📌"></a>链表中环的入口结点📌</h1><hr>
+<h1 id="旋转链表"><a href="#旋转链表" class="headerlink" title="旋转链表"></a>旋转链表</h1><hr>
+<h4 id="描述-13"><a href="#描述-13" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/rotate-list/">https://leetcode.cn/problems/rotate-list/</a></p>
+<p>给你一个链表的头节点<code>head</code>，旋转链表，将链表每个节点向右移动<code>k</code>个位置。</p>
+<h4 id="思路-13"><a href="#思路-13" class="headerlink" title="思路"></a>思路</h4><h4 id="代码-13"><a href="#代码-13" class="headerlink" title="代码"></a>代码</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ListNode <span class="title function_">rotateRight</span><span class="params">(ListNode head, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(head==<span class="literal">null</span>||k==<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> head;</span><br><span class="line">        <span class="type">int</span> len=<span class="number">0</span>;</span><br><span class="line">        ListNode p=head;</span><br><span class="line">        <span class="keyword">while</span>(p!=<span class="literal">null</span>)&#123;</span><br><span class="line">            len++;</span><br><span class="line">            p=p.next;</span><br><span class="line">        &#125;</span><br><span class="line">        k=k%len;</span><br><span class="line">        <span class="keyword">if</span>(k==<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> head;</span><br><span class="line">        <span class="comment">//找到倒数第k个节点的前一个节点 倒数第k+1个节点</span></span><br><span class="line">        k++;</span><br><span class="line">        ListNode p1=head;</span><br><span class="line">        ListNode p2=head;</span><br><span class="line">        <span class="keyword">while</span>(k--&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            p1=p1.next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(p1!=<span class="literal">null</span>)&#123;</span><br><span class="line">            p2=p2.next;</span><br><span class="line">            p1=p1.next;</span><br><span class="line">        &#125;</span><br><span class="line">        ListNode h=p2.next;</span><br><span class="line">        p2.next=<span class="literal">null</span>;</span><br><span class="line">        p2=h;</span><br><span class="line">        <span class="keyword">while</span>(p2.next!=<span class="literal">null</span>)</span><br><span class="line">            p2=p2.next;</span><br><span class="line">        p2.next=head;</span><br><span class="line">        <span class="keyword">return</span> h;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="复杂度分析-4"><a href="#复杂度分析-4" class="headerlink" title="复杂度分析"></a>复杂度分析</h4><h1 id="两两交换链表中的节点📌"><a href="#两两交换链表中的节点📌" class="headerlink" title="两两交换链表中的节点📌"></a>两两交换链表中的节点📌</h1><hr>
+<p><a href="https://leetcode.cn/problems/swap-nodes-in-pairs/">https://leetcode.cn/problems/swap-nodes-in-pairs/</a></p>
+<h1 id="分隔链表"><a href="#分隔链表" class="headerlink" title="分隔链表"></a>分隔链表</h1><hr>
+<h4 id="描述-14"><a href="#描述-14" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/partition-list/">https://leetcode.cn/problems/partition-list/</a></p>
+<p>给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在大于或等于 x 的节点之前。</p>
+<p>你应当保留 两个分区中每个节点的初始相对位置。</p>
+<h4 id="思路-14"><a href="#思路-14" class="headerlink" title="思路"></a>思路</h4><p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230720104819.png" alt="image.png"></p>
+<h4 id="代码-14"><a href="#代码-14" class="headerlink" title="代码"></a>代码</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">struct</span> ListNode* <span class="title function_">partition</span><span class="params">(<span class="keyword">struct</span> ListNode* head, <span class="type">int</span> x)</span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">dummy</span>=</span>(<span class="keyword">struct</span> ListNode*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> ListNode));</span><br><span class="line">    dummy-&gt;next=head;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">p1</span>=</span>dummy;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">p2</span>=</span>dummy-&gt;next;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">re</span>=</span>(<span class="keyword">struct</span> ListNode*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> ListNode));</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> *<span class="title">k</span>=</span>re;</span><br><span class="line">    re-&gt;next=<span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">while</span>(p2)&#123;</span><br><span class="line">        <span class="keyword">if</span>(p2-&gt;val&gt;=x)&#123;</span><br><span class="line">            p1-&gt;next=p2-&gt;next;</span><br><span class="line">            p2-&gt;next=<span class="literal">NULL</span>;</span><br><span class="line">            k-&gt;next=p2;</span><br><span class="line">            k=k-&gt;next;</span><br><span class="line">            p2=p1-&gt;next;</span><br><span class="line">           </span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            p2=p2-&gt;next;</span><br><span class="line">            p1=p1-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    p1-&gt;next=re-&gt;next;</span><br><span class="line">    <span class="keyword">return</span> dummy-&gt;next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="从尾到头打印链表"><a href="#从尾到头打印链表" class="headerlink" title="从尾到头打印链表"></a>从尾到头打印链表</h1><hr>
+<h4 id="描述-15"><a href="#描述-15" class="headerlink" title="描述"></a>描述</h4><p><a href="https://leetcode.cn/problems/cong-wei-dao-tou-da-yin-lian-biao-lcof/">https://leetcode.cn/problems/cong-wei-dao-tou-da-yin-lian-biao-lcof/</a></p>
+<p>输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）。</p>
+<h4 id="思路-15"><a href="#思路-15" class="headerlink" title="思路"></a>思路</h4><p>&#x3D;&#x3D;先反转(个人认为是最优解)&#x3D;&#x3D;</p>
+<p>&#x3D;&#x3D;先入栈再出栈&#x3D;&#x3D;</p>
+<p>&#x3D;&#x3D;递归&#x3D;&#x3D;</p>
+<h4 id="代码-15"><a href="#代码-15" class="headerlink" title="代码"></a>代码</h4><p>递归代码:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    ArrayList&lt;Integer&gt; tmp = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[] reversePrint(ListNode head) &#123;</span><br><span class="line">        recur(head);</span><br><span class="line">        <span class="type">int</span>[] res = <span class="keyword">new</span> <span class="title class_">int</span>[tmp.size()];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; res.length; i++)</span><br><span class="line">            res[i] = tmp.get(i);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">recur</span><span class="params">(ListNode head)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">        recur(head.next);</span><br><span class="line">        tmp.add(head.val);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>数据结构题目</category>
+        <category>链表</category>
+      </categories>
+      <tags>
+        <tag>数据结构</tag>
+        <tag>链表</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>FinalShell连接虚拟机遇到的一系列问题</title>
+    <url>/dyc/2023/08/03/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6/FinalShell%E8%BF%9E%E6%8E%A5%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E7%B3%BB%E5%88%97%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><hr>
+<p>虚拟机安装的是Ubuntu14版本，使用FinalShell的用户名密码方式连接，遇到了一系列问题</p>
+<h2 id="连接超时"><a href="#连接超时" class="headerlink" title="连接超时"></a>连接超时</h2><hr>
+<p>连接信息如下</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803113824.png" alt="image.png|375"></p>
+<p>已经保证IP正确</p>
+<h4 id="尝试切换root用户"><a href="#尝试切换root用户" class="headerlink" title="尝试切换root用户"></a>尝试切换root用户</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">su root</span><br></pre></td></tr></table></figure>
+
+<p>一直保存，搜索原因，因为刚安装好的Linux系统是没有给root设置密码的</p>
+<p>解决方法：</p>
+<p>首先输入以下命令：  </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo passwd root</span><br></pre></td></tr></table></figure>
+
+
+<p>按提示输入密码</p>
+<p>然后进入root权限即可，如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">su root</span><br></pre></td></tr></table></figure>
+
+<p>进入成功</p>
+<p>再次连接依旧显示连接超时</p>
+<h4 id="查看是否打开vm网络连接"><a href="#查看是否打开vm网络连接" class="headerlink" title="查看是否打开vm网络连接"></a>查看是否打开vm网络连接</h4><p>这个方法来自这篇博客:</p>
+<p><a href="https://blog.csdn.net/qq_54500778/article/details/128294457">https://blog.csdn.net/qq_54500778/article/details/128294457</a></p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803114307.png" alt="image.png"></p>
+<p>发现我的电脑是停用状态，开启后重新连接，连接不再超时，但是显示拒绝连接</p>
+<h2 id="拒绝连接"><a href="#拒绝连接" class="headerlink" title="拒绝连接"></a>拒绝连接</h2><h4 id="安装SSH服务"><a href="#安装SSH服务" class="headerlink" title="安装SSH服务"></a>安装SSH服务</h4><p>网上说可能是虚拟机没有安装ssh，于是尝试安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get install openssh-server</span><br></pre></td></tr></table></figure>
+
+<p>启用</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /etc/init.d/</span><br><span class="line">sudo start ssh</span><br></pre></td></tr></table></figure>
+
+<p>查看状态</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo service ssh status</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="连接时一直提示输入密码"><a href="#连接时一直提示输入密码" class="headerlink" title="连接时一直提示输入密码"></a>连接时一直提示输入密码</h2><hr>
+<p>解决方法参考了这篇博客</p>
+<p><a href="https://blog.csdn.net/find1star/article/details/131785198">https://blog.csdn.net/find1star/article/details/131785198</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+
+<p>打开后找到 PermitRootLogin 并将其改为 yes</p>
+<p>最后输入指令重启ssh服务，回到finalshell即可正常连接</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo restart ssh</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>虚拟机</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>虚拟机软件的使用</title>
+    <url>/dyc/2023/08/03/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="虚拟机技术的作用"><a href="#虚拟机技术的作用" class="headerlink" title="虚拟机技术的作用"></a>虚拟机技术的作用</h2><hr>
+<p>真实计算机上安装<code>虚拟机软件</code>，通过模拟计算机的硬件来运行多个虚拟计算机。</p>
+<p>常见的基于软件的虚拟机软件包括VirtualBox、VMware Workstation等。</p>
+<p>现阶段要模拟真实的 代码测试环境、生产环境、开发环境。</p>
+<p>服务器是一个大型的主机，也就意味着主机上必然也装了一个操作系统。</p>
+<p>主流服务器使用的操作系统 目前以Linux为主</p>
+<p>但大众多使用Windows或Mac，使用虚拟机帮助学习者模拟出真实的Linux环境 ，便于学习</p>
+<h2 id="案例-VMWARE安装Ubuntu14"><a href="#案例-VMWARE安装Ubuntu14" class="headerlink" title="案例:VMWARE安装Ubuntu14"></a>案例:VMWARE安装Ubuntu14</h2><hr>
+<h3 id="新建虚拟机"><a href="#新建虚拟机" class="headerlink" title="新建虚拟机"></a>新建虚拟机</h3><p>安装VMWARE之后，从网上下载操作系统镜像文件， 如 Ubuntu官网 <a href="http://www.ubuntu.com/">http://www.ubuntu.com/</a></p>
+<blockquote>
+<p>镜像文件其实和rar、zip压缩包类似，是将特定的一系列文件按照一定的格式制作成单一的文件，以方便用户下载和使用，例如一个操作系统、游戏等。常见的镜像文件格式有.iso、.mds、.gho等。</p>
+</blockquote>
+<p>下载完成后，打开 VMware 主界面，点击划圆圈的部分“创建新的虚拟机”</p>
+<p>选择自定义选项，然后点击下一步</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091620.png" alt="image.png|500"></p>
+<p>进入兼容性界面，继续点击“下一步”按钮</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091645.png" alt="image.png"></p>
+<p>进入操作系统选择界面，点击稍后安装操作系统，并且点击下一步</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091710.png" alt="image.png"></p>
+<p>进入选择相应操作系统和版本，点下一步</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091734.png" alt="image.png"></p>
+<p>设置虚拟机名称（即每次启动VMware左上方显示的名字），之后选择安装路径（默认在C盘，很不方便）。</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091753.png" alt="image.png"></p>
+<p>进入设置处理器个数以及核心数量选择，点击下一步</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091822.png" alt="image.png"></p>
+<p>设置内存，可以根据自己的电脑配置进行调整，然后点击下一步</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091841.png" alt="image.png"></p>
+<p>网络类型选择 “使用网络地址转换NAT”</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091858.png" alt="image.png"></p>
+<p>SCSI 控制器类型选择推荐的 “LSI Logic”</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091922.png" alt="image.png"></p>
+<p>虚拟磁盘类型选择推荐的 “SCSI”</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803091937.png" alt="image.png"></p>
+<p>选择 <strong>“创建新虚拟磁盘”</strong> </p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092000.png" alt="image.png"></p>
+<p>设置磁盘容量，并选择 <strong>“将虚拟磁盘拆分成多个文件”</strong> 。（这里的磁盘大小看个人需求，大于等于推荐的大小）</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092029.png" alt="image.png"></p>
+<p>磁盘文件命名。（自行修改，或接受默认命名）</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092044.png" alt="image.png"></p>
+<p>到这里虚拟机已经创建完成！可以直接点击 “完成” 。（也可以点击 <strong>“自定义硬件”</strong> ，修改内存大小、处理器内核等设置）</p>
+<h3 id="安装操作系统"><a href="#安装操作系统" class="headerlink" title="安装操作系统"></a>安装操作系统</h3><p>回到 VMware 界面，可以看到 <strong>“我的计算机”</strong> 下多了一个Ubuntu（就是我们刚才创建的虚拟机），点击 <strong>“编辑虚拟机设置”</strong> </p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092115.png" alt="image.png"></p>
+<p>选择 <strong>“CD&#x2F;DVD”</strong> ，在设备状态中 <strong>勾选 “启动时连接”</strong> ，在连接中选择 <strong>“使用ISO映像文件”</strong> ，点击 “<strong>浏览”</strong> 选择准备好的操作系统的镜像文件，点击 <strong>“确定”</strong> </p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092146.png" alt="image.png"></p>
+<p>选择虚拟机，点击 <strong>“开启此虚拟机”</strong> </p>
+<p>进入Ubuntu的安装界面，选择语言，点击 <strong>“安装Ubuntu”</strong> </p>
+<p>这里的 <strong>“安装Ubuntu时下载更新”</strong> 就<strong>不用勾选</strong>了（系统安装完成后再选择更新也行）</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092220.png" alt="image.png"></p>
+<p>接下来的选项全部按照 <strong>默认</strong> 即可</p>
+<p>选择地区</p>
+<p>选择语言</p>
+<p>设置姓名、计算机名、密码等等</p>
+<p>等待安装完成</p>
+<p>安装完成，选择 <strong>“现在重启”</strong></p>
+<p>可以看到现在虚拟机的窗口比较小。点击左侧的 <strong>“系统设置”</strong> 图标 ，再点击 <strong>“显示” 。</strong></p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092315.png" alt="image.png"></p>
+<p>修改<strong>分辨率</strong>（和主机分辨率差不多就行），再点击右下角的 <strong>“应用”</strong> 。</p>
+<p>选择左上角 <strong>“查看 -&gt; 全屏”</strong> ，就可以进入全屏模式。</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803092352.png" alt="image.png"></p>
+<h2 id="虚拟机克隆"><a href="#虚拟机克隆" class="headerlink" title="虚拟机克隆"></a>虚拟机克隆</h2><hr>
+<p>方式1 复制虚拟机文件夹</p>
+<p>1、首先复制已经创建好的虚拟机所在的文件夹<br>2、将文件夹存在在其它文件夹内，并重新命名。<br>3、在虚拟机中打开这个复制的文件夹<br>4、找到复制的文件夹中的后缀为vmx的文件，然后打开。此时虚拟机中已经出现了你复制的虚拟机，并且用户名和密码与你原先的虚拟机是一样的。</p>
+<p>方式2 VM克隆</p>
+<p>我认为方式1更方便，不再介绍方式2</p>
+<h2 id="虚拟机快照"><a href="#虚拟机快照" class="headerlink" title="虚拟机快照"></a>虚拟机快照</h2><hr>
+<p>在拍摄快照时，保留虚拟机的状态，以便反复恢复为相同的状态。快照捕获拍摄快照时的完整虚拟机状态，包括虚拟机内存、虚拟机设置以及所有虚拟磁盘的状态。</p>
+<p>1，创建虚拟机快照<br>在菜单栏中，点击拍摄此虚拟机快照，弹出提示框，输入快照名称和描述内容</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803094908.png" alt="image.png"></p>
+<p>2，恢复到已有快照<br>点击菜单中的快照管理器  选择已经保存的快照节点，点击【转到】  提示：恢复此快照后，当前状态丢失。点击【是】  开始恢复到虚拟机之前的快照位置</p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803094934.png" alt="image.png"></p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803095008.png" alt="image.png"></p>
+<h2 id="虚拟机删除"><a href="#虚拟机删除" class="headerlink" title="虚拟机删除"></a>虚拟机删除</h2><hr>
+<p>用  vmware 进行移除，再点击菜单-&gt;磁盘删除即可</p>
+<p>或者直接手动删除虚拟系统对应的文件夹即可。</p>
+<h2 id="虚拟机的三种网络连接方式"><a href="#虚拟机的三种网络连接方式" class="headerlink" title="虚拟机的三种网络连接方式"></a>虚拟机的三种网络连接方式</h2><hr>
+<p>桥接模式是将主机网卡直接与虚拟机网卡相连，利用虚拟网桥进行通信，在桥接的作用下，相当于把物理主机虚拟为一个交换机，所有设置了桥接的虚拟主机连接到此虚拟交换机上，所以设置了桥接模式的虚拟主机与虚拟主机之间可以相互访问而不冲突，如果虚拟主机需要联网则需要将虚拟主机的DNS与网关和本地主机网卡一致</p>
+<p>Nat本身的意思为网络地址转换即将内网地址转换为公网地址，因此使用nat可以节省ip资源，但是又想要虚拟机可以联网，那么使用nat模式是最好的选择，Nat模式使用虚拟nat设备和虚拟DHCP服务器与虚拟网卡相连，而虚拟nat设备和虚拟DHCP服务器与主机网卡相连，Vmnet 8与主机上的VMware Network AdapterVMnet8相连，所以主机与虚拟机直接可以相互通信。</p>
+<p>仅主机模式其实就是省略了NAT设备，因此这种模式无法与访问外网，这种模式是使用VMware Network Adapter VMnet1虚拟网卡与VMware1虚拟交换机相连，因此在这种模式下，主机与虚拟机之间可以相互通信，在同一网段，相当于虚拟机本身成为一个独立的个体，但是只能是主机与虚拟机之间相互通信。</p>
+<h2 id="服务器远程管理工具FinalShell"><a href="#服务器远程管理工具FinalShell" class="headerlink" title="服务器远程管理工具FinalShell"></a>服务器远程管理工具FinalShell</h2><hr>
+<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><p><strong>FinalShell</strong>是一款美观易用、功能强大的国产网络服务管理软件，十分实用和方便，简单大方的界面设计让用户一目了然。主要是通过命令行操作服务器。</p>
+<h3 id="连接远程-linux-服务器-用户名密码方式"><a href="#连接远程-linux-服务器-用户名密码方式" class="headerlink" title="连接远程 linux 服务器(用户名密码方式)"></a>连接远程 linux 服务器(用户名密码方式)</h3><p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803095438.png" alt="image.png|475"></p>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230803113824.png" alt="image.png|375"></p>
+<p>这一过程遇到了一系列问题，见：</p>
+<p><a href="/2023/08/03/%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BD%AF%E4%BB%B6/FinalShell%E8%BF%9E%E6%8E%A5%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E7%B3%BB%E5%88%97%E9%97%AE%E9%A2%98/">FinalShell连接虚拟机遇到的一系列问题</a></p>
+]]></content>
+      <categories>
+        <category>工具</category>
+        <category>虚拟机</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>图的m着色问题</title>
+    <url>/dyc/2023/08/01/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E6%97%A5%E5%BF%97/2023-8/8-1/%E5%9B%BE%E7%9A%84m%E7%9D%80%E8%89%B2%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><hr>
+<p><a href="https://www.luogu.com.cn/problem/P2819">https://www.luogu.com.cn/problem/P2819</a></p>
+<p>给定无向连通图 $G$ 和 $m$ 种不同的颜色。用这些颜色为图 $G$ 的各顶点着色，每个顶点着一种颜色。如果有一种着色法使 $G$ 中每条边的 $2$ 个顶点着不同颜色，则称这个图是 $m$ 可着色的。<br>图的 $m$ 着色问题是对于给定图 $G$ 和 $m$ 种颜色，找出所有不同的着色法。<br>对于给定的无向连通图 $G$ 和 $m$ 种不同的颜色，编程计算图的所有不同的着色法。</p>
+<p>输入 第 $1$ 行有 $3$ 个正整数 $n,k,m$，表示给定的图 $G$ 有 $n$ 个顶点和 $k$ 条边，$m$ 种颜色。顶点编号为 $1,2,\dots,m$。接下来的 $k$ 行中，每行有 $2$ 个正整数 $u,v$，表示图 $G$ 的一条边 $(u,v)$。</p>
+<p>输出计算出的不同的着色方案数输出。</p>
+<p>数据保证，$1\leq n\leq 100$，$1 \leq k\leq 2500$。</p>
+<p>在 $n$ 很大时保证 $k$ 足够大。</p>
+<p>保证答案不超过 $20000$。</p>
+<p>样例输入</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">5 8 4</span><br><span class="line">1 2</span><br><span class="line">1 3</span><br><span class="line">1 4</span><br><span class="line">2 3</span><br><span class="line">2 4</span><br><span class="line">2 5</span><br><span class="line">3 4</span><br><span class="line">4 5</span><br></pre></td></tr></table></figure>
+
+<p>样例输出</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">48</span><br></pre></td></tr></table></figure>
+
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><hr>
+<p>1）定义问题的解空间<br>图的m 着色问题的解空间形式为n元组{x1 ,x2 ,…,xi ,…,xn }，每一个分量的取值 都为1,2,…,m ，即问题的解是一个n 元向量。由此可得，问题的解空间为{x1,x2,…，xi,…,xn}，其中显约束xi &#x3D;1,2,…,m （i &#x3D;1,2,3,…,n ）。xi &#x3D;2表示在图G 中将第i个节点着色为2号色。</p>
+<p>2）确定解空间的组织结构<br>问题的解空间组织结构是一棵满m叉树，树的深度为n </p>
+<p>3）搜索解空间</p>
+<p>（1）约束条件。<br>假设当前扩展节点处于解空间树的第t 层，那么 从第1个节点到第t -1个节点的状态（着色的色号）已经确定。接下来 沿着扩展节点的第1个分支进行扩展，此时需要判断第t个节点的着色情况。第t 个节点的颜色要与前t -1个节点中与其有边相连的节点颜 色不同，如果有颜色相同的，则第t个节点不能用这个色号，换下一个色号尝试</p>
+<p>（2）限界条件。<br>因为只找可行解就可以了，不是求最优解，因此不需要限界条件。</p>
+<p>（3）搜索过程。<br>扩展节点沿着第1个分支扩展，判断约束条件，如果满足，则进入深一层继续搜索；如果不满足，则扩展生成的节点 被剪掉，换下一个色号尝试。如果所有的色号都尝试完毕，则该节点 变成死节点，向上回溯到离其最近的活节点，继续搜索。搜索到叶子节点时，找到一种着色方案。搜索到全部活节点都变成死节点时为止。</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><hr>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">100</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> K = N / <span class="number">2</span> * (N - <span class="number">1</span>);</span><br><span class="line"><span class="type">int</span> h[N + <span class="number">1</span>];</span><br><span class="line"><span class="type">int</span> to[K];</span><br><span class="line"><span class="type">int</span> ne[K];</span><br><span class="line"><span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> n, k, m;</span><br><span class="line"><span class="type">int</span> x[N];</span><br><span class="line"><span class="type">int</span> ans;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">		h[i] = <span class="number">-1</span>;</span><br><span class="line">	cnt = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">add</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> v)</span> </span>&#123;</span><br><span class="line">	to[cnt] = v;</span><br><span class="line">	ne[cnt] = h[u];</span><br><span class="line">	h[u] = cnt++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">OK</span><span class="params">(<span class="type">int</span> col)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> j = h[col]; j != <span class="number">-1</span>; j = ne[j]) &#123;</span><br><span class="line">		<span class="keyword">if</span> (x[to[j]] == x[col])</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> t)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (t &gt; n) &#123;</span><br><span class="line">		ans++;</span><br><span class="line">		<span class="comment">//for (int i = 1; i &lt;= n; i++)</span></span><br><span class="line">		<span class="comment">//	cout &lt;&lt; x[i] &lt;&lt; &quot; &quot;;</span></span><br><span class="line">		<span class="comment">//cout &lt;&lt; endl;</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; i++) &#123;</span><br><span class="line">			x[t] = i;</span><br><span class="line">			<span class="keyword">if</span> (<span class="built_in">OK</span>(t))</span><br><span class="line">				<span class="built_in">dfs</span>(t + <span class="number">1</span>);</span><br><span class="line">			x[t] = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	cin &gt;&gt; n &gt;&gt; k &gt;&gt; m;</span><br><span class="line">	<span class="built_in">init</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; k; i++) &#123;</span><br><span class="line">		<span class="type">int</span> u, v;</span><br><span class="line">		cin &gt;&gt; u &gt;&gt; v;</span><br><span class="line">		<span class="built_in">add</span>(u, v);</span><br><span class="line">		<span class="built_in">add</span>(v, u);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">dfs</span>(<span class="number">1</span>);</span><br><span class="line">	cout &lt;&lt; ans;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h4><hr>
+<p><img src="https://typora00111.oss-cn-qingdao.aliyuncs.com/img/20230801193009.png" alt="image.png"></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>刷题</category>
+        <category>2023.8</category>
+      </categories>
+      <tags>
+        <tag>dfs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>可能的二分法</title>
+    <url>/dyc/2023/08/01/%E7%AE%97%E6%B3%95%E5%88%B7%E9%A2%98%E6%97%A5%E5%BF%97/2023-8/8-1/%E5%8F%AF%E8%83%BD%E7%9A%84%E4%BA%8C%E5%88%86%E6%B3%95/</url>
+    <content><![CDATA[<h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><hr>
+<p><a href="https://leetcode.cn/problems/possible-bipartition/">https://leetcode.cn/problems/possible-bipartition/</a></p>
+<p>给定一组n人（编号为1, 2, …, n），我们想把每个人分进任意大小的两组。每个人都可能不喜欢其他人，那么他们不应该属于同一组。</p>
+<p>给定整数 n 和数组 dislikes ，其中 <code>dislikes[i] = [ai, bi]</code> ，表示不允许将编号为 ai 和 bi的人归入同一组。当可以用这种方法将所有人分进两组时，返回 true；否则返回 false。</p>
+<p>示例：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">输入：n = 4, dislikes = [[1,2],[1,3],[2,4]]</span><br><span class="line">输出：true</span><br><span class="line">解释：group1 [1,4], group2 [2,3]</span><br></pre></td></tr></table></figure>
+
+<p>数据范围:</p>
+<p>$1 &lt;&#x3D; n &lt;&#x3D; 2000$<br>$0 &lt;&#x3D; dislikes.length &lt;&#x3D; 1e4$<br>$dislikes[i].length &#x3D; 2$<br>$1 &lt;&#x3D; dislikes[i][j] &lt;&#x3D; n$<br>$ai &lt; bi$<br>dislikes中每一组都 不同</p>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><hr>
+<p>转化为图的染色问题，用数组<code>color[i]</code>表示第i个点的染色，初始为0，表示未染色；<br>根据题意，把所有人分成A，B两组，用两种颜色1和2表示；<br>建图后，如果一个点未染色，默认用颜色1染色，那么与它邻接的所有点都必须染成染色2，染色过程出现了冲突就返回false；</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><hr>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> m = (<span class="number">2010</span> - <span class="number">1</span>) / <span class="number">2</span> * <span class="number">2010</span>;</span><br><span class="line"><span class="type">int</span> h[<span class="number">2010</span>];</span><br><span class="line"><span class="type">int</span> to[m];</span><br><span class="line"><span class="type">int</span> ne[m];</span><br><span class="line"><span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> color[<span class="number">2010</span>];</span><br><span class="line"><span class="type">int</span> N;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= N; i++)</span><br><span class="line">        h[i] = <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">add_edge</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> v)</span> </span>&#123;</span><br><span class="line">    to[cnt] = v;</span><br><span class="line">    ne[cnt] = h[u];</span><br><span class="line">    h[u] = cnt++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> col)</span> </span>&#123;</span><br><span class="line">    color[p] = col;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> j = h[p]; j != <span class="number">-1</span>; j = ne[j]) &#123;</span><br><span class="line">        <span class="keyword">if</span> (color[to[j]] == col) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span> (color[to[j]] == <span class="number">0</span> &amp;&amp; !<span class="built_in">dfs</span>(to[j], <span class="number">3</span> - col)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">possibleBipartition</span><span class="params">(<span class="type">int</span> n, vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; dislikes)</span> </span>&#123;</span><br><span class="line">        N = n;</span><br><span class="line">        <span class="built_in">memset</span>(color, <span class="number">0</span>, <span class="built_in">sizeof</span>(color)); </span><br><span class="line">        <span class="built_in">init</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; dislikes.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="built_in">add_edge</span>(dislikes[i][<span class="number">0</span>], dislikes[i][<span class="number">1</span>]);</span><br><span class="line">            <span class="built_in">add_edge</span>(dislikes[i][<span class="number">1</span>], dislikes[i][<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (color[i] != <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span> (!<span class="built_in">dfs</span>(i, <span class="number">1</span>)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>算法</category>
+        <category>刷题</category>
+        <category>2023.8</category>
+      </categories>
+      <tags>
+        <tag>dfs</tag>
+        <tag>模板题</tag>
+      </tags>
+  </entry>
+</search>
